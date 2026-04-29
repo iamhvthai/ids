@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IDS — Intrusion Detection System</title>
+  <meta name="description" content="Machine Learning based Intrusion Detection System dashboard comparing KNN, Random Forest, and SVM algorithms on CICIDS2017 dataset."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+</head>
+<body>
+
+<!-- ── HEADER ─────────────────────────────────────────────────────────────── -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-icon">🛡️</span>
+      <div>
+        <h1>IDS Dashboard</h1>
+        <p>Intrusion Detection System — Machine Learning</p>
+      </div>
+    </div>
+    <div class="header-stats" id="headerStatus">
+      <div class="stat-chip" id="chipModels"><span class="dot loading"></span> Loading...</div>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- ── STATUS BANNER ──────────────────────────────────────────────────── -->
+  <div class="alert-banner" id="alertBanner" style="display:none"></div>
+
+  <!-- ── SECTION 1: DATASET INFO ─────────────────────────────────────────── -->
+  <section class="card">
+    <div class="card-header">
+      <h2>📊 Dataset Overview</h2>
+      <span class="badge badge-blue">CICIDS2017</span>
+    </div>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-label">Dataset</span>
+        <span class="info-value">CICIDS2017 — Friday DDoS</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Total Records</span>
+        <span class="info-value highlight">225,745</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Features</span>
+        <span class="info-value highlight">78</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Classes</span>
+        <span class="info-value">BENIGN / DDoS</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Train / Test Split</span>
+        <span class="info-value">80% / 20%</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Scaling</span>
+        <span class="info-value">StandardScaler</span>
+      </div>
+    </div>
+    <div class="label-dist">
+      <div class="dist-bar">
+        <div class="dist-segment benign" style="width:43.29%">
+          <span>BENIGN 43.3%</span>
+        </div>
+        <div class="dist-segment ddos" style="width:56.71%">
+          <span>DDoS 56.7%</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 2: MODEL COMPARISON TABLE ────────────────────────────────── -->
+  <section class="card">
+    <div class="card-header">
+      <h2>🤖 Model Comparison</h2>
+      <span class="badge badge-purple">KNN · Random Forest · SVM</span>
+    </div>
+    <div id="comparisonContent">
+      <div class="skeleton-loader">
+        <div class="skeleton-row"></div>
+        <div class="skeleton-row"></div>
+        <div class="skeleton-row"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 3: CHARTS ─────────────────────────────────────────────────── -->
+  <section class="card">
+    <div class="card-header">
+      <h2>📈 Performance Charts</h2>
+    </div>
+    <div class="charts-grid">
+      <div class="chart-box">
+        <h3>Overall Comparison</h3>
+        <img id="chartComparison" src="/static/charts/comparison.png" alt="Model Comparison Chart" class="chart-img" onerror="this.parentElement.innerHTML='<p class=chart-missing>Run train.py to generate charts</p>'"/>
+      </div>
+    </div>
+    <div class="cm-grid">
+      <div class="chart-box">
+        <h3>KNN — Confusion Matrix</h3>
+        <img id="cmKNN" src="/static/charts/cm_knn.png" alt="KNN Confusion Matrix" class="chart-img" onerror="this.style.display='none'"/>
+      </div>
+      <div class="chart-box">
+        <h3>Random Forest — Confusion Matrix</h3>
+        <img id="cmRF" src="/static/charts/cm_rf.png" alt="RF Confusion Matrix" class="chart-img" onerror="this.style.display='none'"/>
+      </div>
+      <div class="chart-box">
+        <h3>SVM — Confusion Matrix</h3>
+        <img id="cmSVM" src="/static/charts/cm_svm.png" alt="SVM Confusion Matrix" class="chart-img" onerror="this.style.display='none'"/>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 4: REAL-TIME MONITORING ────────────────────────────────────── -->
+  <section class="card">
+    <div class="card-header">
+      <h2>📡 Real-time Monitoring</h2>
+      <span class="badge badge-red">Live Alerts</span>
+    </div>
+    <p class="section-desc">
+      Lắng nghe traffic thời gian thực từ các target machines (Agent).
+    </p>
+    <div class="monitoring-container" style="background: #16213e; border-radius: 8px; padding: 15px; border: 1px solid #0f3460;">
+      <table class="alert-table" style="width: 100%; border-collapse: collapse; text-align: left;">
+        <thead>
+          <tr style="border-bottom: 2px solid #0f3460;">
+            <th style="padding: 10px; color: #a0aabf;">Time</th>
+            <th style="padding: 10px; color: #a0aabf;">Source IP</th>
+            <th style="padding: 10px; color: #a0aabf;">Prediction</th>
+            <th style="padding: 10px; color: #a0aabf;">Confidence</th>
+          </tr>
+        </thead>
+        <tbody id="realtimeLogs">
+          <!-- Logs will be prepended here by SocketIO -->
+          <tr><td colspan="4" style="text-align:center; padding: 20px; color: #666;">Waiting for traffic...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── SECTION 5: LIVE PREDICTION (MANUAL) ──────────────────────────────── -->
+  <section class="card">
+    <div class="card-header">
+      <h2>🔍 Live Prediction</h2>
+      <span class="badge badge-green">Real-time Detection</span>
+    </div>
+    <p class="section-desc">
+      Nhập thủ công các thông số lưu lượng mạng để dự đoán xem đó là lưu lượng bình thường hay tấn công DDoS.
+    </p>
+
+    <div class="predict-form">
+      <!-- Quick Presets -->
+      <div class="preset-row">
+        <span class="preset-label">Quick Presets:</span>
+        <button class="btn btn-outline" onclick="loadPreset('normal')">✅ Normal Traffic</button>
+        <button class="btn btn-outline btn-danger-outline" onclick="loadPreset('ddos')">⚠️ DDoS Attack</button>
+        <button class="btn btn-outline btn-ghost" onclick="clearForm()">🗑️ Clear</button>
+      </div>
+
+      <!-- Model selector -->
+      <div class="form-row">
+        <label for="selectModel">Algorithm:</label>
+        <select id="selectModel" class="form-select">
+          <option value="KNN">KNN (K-Nearest Neighbors)</option>
+          <option value="Random Forest" selected>Random Forest</option>
+          <option value="SVM (Linear)">SVM (Linear SVC)</option>
+        </select>
+      </div>
+
+      <!-- Feature Inputs — key features only -->
+      <div class="features-grid" id="featuresGrid">
+        <!-- Rendered by JS -->
+      </div>
+
+      <button class="btn btn-primary btn-large" id="btnPredict" onclick="runPredict()">
+        <span id="btnPredictText">🚀 Run Detection</span>
+      </button>
+    </div>
+
+    <!-- Result Box -->
+    <div class="predict-result" id="predictResult" style="display:none">
+      <div class="result-header">
+        <span class="result-icon" id="resultIcon"></span>
+        <div>
+          <div class="result-label" id="resultLabel"></div>
+          <div class="result-confidence" id="resultConfidence"></div>
+        </div>
+      </div>
+      <div class="all-model-results" id="allModelResults"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>IDS Dashboard · CICIDS2017 · KNN / Random Forest / SVM · Built with Python &amp; Flask · DACN1</p>
+</footer>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+<!-- Socket.IO cho Real-time -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+    const logsTbody = document.getElementById('realtimeLogs');
+    let logCount = 0;
+
+    socket.on('connect', function() {
+        console.log('Websocket connected!');
+    });
+
+    socket.on('new_alert', function(msg) {
+        if(logCount === 0) logsTbody.innerHTML = ''; // clear waiting text
+        
+        const row = document.createElement('tr');
+        row.style.borderBottom = "1px solid #0f3460";
+        row.style.background = "rgba(255, 101, 132, 0.1)"; // highlight red
+        
+        row.innerHTML = `
+          <td style="padding: 10px;">${msg.timestamp}</td>
+          <td style="padding: 10px; font-weight: bold;">${msg.source_ip}</td>
+          <td style="padding: 10px;"><span class="badge badge-red">${msg.prediction}</span></td>
+          <td style="padding: 10px;">${msg.confidence}%</td>
+        `;
+        
+        logsTbody.prepend(row);
+        logCount++;
+        if(logCount > 50) logsTbody.lastElementChild.remove(); // keep last 50
+    });
+
+    socket.on('normal_traffic', function(msg) {
+        if(logCount === 0) logsTbody.innerHTML = '';
+        
+        const row = document.createElement('tr');
+        row.style.borderBottom = "1px solid #0f3460";
+        
+        row.innerHTML = `
+          <td style="padding: 10px;">${msg.timestamp}</td>
+          <td style="padding: 10px;">${msg.source_ip}</td>
+          <td style="padding: 10px;"><span class="badge badge-green">${msg.prediction}</span></td>
+          <td style="padding: 10px;">${msg.confidence}%</td>
+        `;
+        
+        logsTbody.prepend(row);
+        logCount++;
+        if(logCount > 50) logsTbody.lastElementChild.remove();
+    });
+  });
+</script>
+</body>
+</html>

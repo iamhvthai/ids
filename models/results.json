@@ -1,0 +1,26 @@
+[
+  {
+    "model": "KNN",
+    "accuracy": 98.1,
+    "precision": 98.22,
+    "recall": 98.1,
+    "f1": 98.09,
+    "train_time": 0.06
+  },
+  {
+    "model": "Random Forest",
+    "accuracy": 99.58,
+    "precision": 99.6,
+    "recall": 99.58,
+    "f1": 99.58,
+    "train_time": 11.56
+  },
+  {
+    "model": "SVM (Linear)",
+    "accuracy": 79.47,
+    "precision": 90.03,
+    "recall": 79.47,
+    "f1": 81.91,
+    "train_time": 824.8
+  }
+]

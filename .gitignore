@@ -1,1 +1,4 @@
 data/raw/CICIDS2017/
+data/*.csv
+models/*.npy
+models/*.pkl
