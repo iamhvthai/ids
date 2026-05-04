@@ -1,26 +1,39 @@
 [
   {
     "model": "KNN",
-    "accuracy": 98.1,
-    "precision": 98.22,
-    "recall": 98.1,
-    "f1": 98.09,
-    "train_time": 0.06
+    "accuracy": 98.44,
+    "precision_w": 99.52,
+    "recall_w": 98.44,
+    "f1_weighted": 98.94,
+    "f1_macro": 83.73,
+    "auc_roc": 99.8,
+    "train_time": 0.93,
+    "val_f1_macro": 83.64,
+    "is_best": false
   },
   {
     "model": "Random Forest",
-    "accuracy": 99.58,
-    "precision": 99.6,
-    "recall": 99.58,
-    "f1": 99.58,
-    "train_time": 11.56
+    "accuracy": 99.82,
+    "precision_w": 99.86,
+    "recall_w": 99.82,
+    "f1_weighted": 99.83,
+    "f1_macro": 94.51,
+    "auc_roc": 99.98,
+    "train_time": 6109.42,
+    "val_f1_macro": 94.13,
+    "best_params": "{'n_estimators': 500, 'min_samples_split': 2, 'max_features': 'sqrt', 'max_depth': 30}",
+    "is_best": true
   },
   {
     "model": "SVM (Linear)",
-    "accuracy": 79.47,
-    "precision": 90.03,
-    "recall": 79.47,
-    "f1": 81.91,
-    "train_time": 824.8
+    "accuracy": 95.21,
+    "precision_w": 98.2,
+    "recall_w": 95.21,
+    "f1_weighted": 96.54,
+    "f1_macro": 77.13,
+    "auc_roc": 99.33,
+    "train_time": 79.72,
+    "val_f1_macro": 77.25,
+    "is_best": false
   }
 ]

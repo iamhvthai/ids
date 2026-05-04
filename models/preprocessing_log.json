@@ -1,0 +1,13 @@
+{
+  "version": "v8",
+  "timestamp": "2026-05-04T15:00:14.938852",
+  "config": {
+    "CORR_THRESHOLD": 0.95,
+    "TOP_N_FEATURES": 40,
+    "SMOTE_SAMPLING_STRATEGY": "not majority",
+    "USE_SCALER": true,
+    "RANDOM_STATE": 42
+  },
+  "rows_dropped": {
+    "duplicates": 331200,
+    "unmapped_labels": 
