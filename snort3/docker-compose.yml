@@ -1,0 +1,26 @@
+services:
+  snort3:
+    image: ciscotalos/snort3:latest
+    container_name: snort3_ids
+    network_mode: "host"
+    volumes:
+      - ./config/snort.lua:/home/snorty/snort3/etc/snort/snort.lua:ro
+      - ./config/local.rules:/home/snorty/snort3/etc/snort/local.rules:ro
+      - ./logs:/var/log/snort
+      - ./pcap:/pcap
+    entrypoint:
+      - /home/snorty/snort3/bin/snort
+    command:
+      - "-c"
+      - "/home/snorty/snort3/etc/snort/snort.lua"
+      - "-A"
+      - "json"
+      - "-i"
+      - "eth0"
+      - "--plugin-path"
+      - "/home/snorty/snort3/lib/snort_extra:/home/snorty/snort3/lib/snort_extra/extra"
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_ADMIN
+    restart: "no"

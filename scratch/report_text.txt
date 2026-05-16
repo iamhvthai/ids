@@ -1,0 +1,515 @@
+VIETNAM – KOREA UNIVERSITY OF INFORMATION AND COMMUNICATION TECHNOLOGY
+ 
+FACULTY OF COMPUTER SCIENCE
+MAJOR PROJECT 1
+TOPIC: BUILDING AN INTRUSION DETECTION 
+SYSTEM USING MACHINE LEARNING 
+</w:r><w:r><w:rPr><w:b/></w:rPr><w:tab/></w:r><w:r w:rsidR="00EB6EFE"><w:rPr><w:b/></w:rPr><w:t>Students
+:
+</w:r><w:r><w:t xml:space="preserve"> 
+ 
+Hu
+ynh Van Truong Hai
+ – 23IT064
+</w:r><w:r><w:tab/></w:r><w:r><w:tab/><w:t xml:space="preserve">      
+</w:r><w:r w:rsidR="00EB6EFE"><w:t xml:space="preserve">  
+Tr
+an Dinh Hung Thinh 
+– 23IT263
+</w:r><w:r><w:rPr><w:b/></w:rPr><w:tab/></w:r><w:r w:rsidR="00EB6EFE"><w:rPr><w:b/></w:rPr><w:t>Supervisor
+:   
+PhD
+. 
+Nguyen Van Binh
+Da Nang, May 2026
+VIETNAM – KOREA UNIVERSITY OF INFORMATION AND COMMUNICATION TECHNOLOGY
+ 
+FACULTY OF COMPUTER SCIENCE
+MAJOR PROJECT 1
+TOPIC: BUILDING AN INTRUSION DETECTION 
+SYSTEM USING MACHINE LEARNING 
+</w:r><w:r><w:rPr><w:b/></w:rPr><w:tab/></w:r><w:r w:rsidR="00B56138"><w:rPr><w:b/></w:rPr><w:t>Students
+:
+</w:r><w:r w:rsidR="00B56138"><w:t xml:space="preserve">Huynh Van Truong Hai 
+– 23IT064
+</w:r><w:r><w:tab/></w:r><w:r><w:tab/><w:t xml:space="preserve">      
+</w:r><w:r w:rsidR="00B56138"><w:t xml:space="preserve">Tran Dinh Hung Thinh 
+– 23IT263
+</w:r><w:r><w:rPr><w:b/></w:rPr><w:tab/></w:r><w:r w:rsidR="00B56138"><w:rPr><w:b/></w:rPr><w:t>Supervisor
+:   
+PhD. Nguyen Van Binh
+Da Nang, May 2026
+<w:t>SUPERVISOR’S COMMENTS
+</w:r></w:p><w:p w14:paraId="2D819A5A" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00A815CE"><w:pPr><w:jc w:val="center"/><w:rPr><w:b/><w:sz w:val="36"/><w:szCs w:val="36"/></w:rPr></w:pPr></w:p><w:p w14:paraId="600B4C94" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:pBdr><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:ind w:firstLine="0"/><w:jc w:val="left"/><w:rPr><w:color w:val="000000"/></w:rPr></w:pPr><w:r><w:rPr><w:color w:val="000000"/></w:rPr><w:t>…………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………
+<w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:spacing w:before="0" w:after="160"/><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:b/><w:color w:val="000000"/><w:sz w:val="36"/><w:szCs w:val="36"/></w:rPr></w:pPr><w:r><w:br w:type="column"/></w:r><w:r w:rsidR="00B56138"><w:rPr><w:b/><w:color w:val="000000"/><w:sz w:val="36"/><w:szCs w:val="36"/></w:rPr><w:lastRenderedPageBreak/><w:t>ACKNOWLEDGEMENTS
+</w:r><w:r w:rsidR="00B56138" w:rsidRPr="00C34966"><w:rPr><w:rStyle w:val="Strong"/><w:b w:val="0"/><w:bCs w:val="0"/></w:rPr><w:t>First of all, on behalf of our group, I would like to express my sincere and profound gratitude to all the lecturers of the Faculty of Computer Science – Vietnam–Korea University of Information and Communication Technology for your dedicated teaching and support throughout the past period.
+In particular, we would like to extend our heartfelt thanks to 
+PhD.
+ 
+Nguyen Van Binh
+, our supervisor, for his invaluable guidance and support during the implementation of this project.
+Due to our limited knowledge and the constraints of time, shortcomings in this report are unavoidable. We respectfully welcome any comments or suggestions from our lecturers, as they will be the most valuable advice for us to improve.
+We sincerely thank you.
+<w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:rPr><w:b/><w:color w:val="000000"/><w:sz w:val="36"/><w:szCs w:val="36"/></w:rPr></w:pPr></w:p><w:p w14:paraId="2F544B62" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00A815CE"><w:pPr><w:keepNext/><w:keepLines/><w:pBdr><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:spacing w:before="240" w:line="259" w:lineRule="auto"/><w:ind w:firstLine="0"/><w:jc w:val="left"/><w:rPr><w:rFonts w:ascii="Play" w:eastAsia="Play" w:hAnsi="Play" w:cs="Play"/><w:color w:val="0F4761"/><w:sz w:val="32"/><w:szCs w:val="32"/></w:rPr></w:pPr></w:p><w:p w14:paraId="4FDCC3DF" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00A815CE"><w:pPr><w:keepNext/><w:keepLines/><w:pBdr><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:spacing w:before="240" w:line="259" w:lineRule="auto"/><w:ind w:firstLine="0"/><w:jc w:val="left"/><w:rPr><w:rFonts w:ascii="Play" w:eastAsia="Play" w:hAnsi="Play" w:cs="Play"/><w:color w:val="0F4761"/><w:sz w:val="32"/><w:szCs w:val="32"/></w:rPr></w:pPr></w:p><w:p w14:paraId="6353109C" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00A815CE"><w:pPr><w:pBdr><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:rPr><w:color w:val="000000"/></w:rPr></w:pPr></w:p><w:p w14:paraId="04B11F45" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00A815CE"><w:pPr><w:pBdr><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:ind w:firstLine="0"/><w:rPr><w:b/><w:color w:val="000000"/><w:sz w:val="36"/><w:szCs w:val="36"/></w:rPr></w:pPr></w:p><w:p w14:paraId="1A095171" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00A815CE"><w:pPr><w:pBdr><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:ind w:firstLine="0"/><w:jc w:val="center"/></w:pPr></w:p><w:p w14:paraId="72861871" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:jc w:val="center"/></w:pPr><w:r><w:br/></w:r><w:r><w:br/></w:r><w:r><w:br/></w:r><w:r><w:br/></w:r><w:r><w:br/></w:r><w:r><w:br/></w:r><w:r><w:br/></w:r><w:r><w:br/></w:r><w:r><w:br/></w:r><w:r><w:br/></w:r><w:r><w:br/></w:r><w:r><w:br/></w:r><w:r><w:br/></w:r><w:r><w:br/></w:r><w:r><w:br/></w:r><w:r><w:br/></w:r><w:r><w:br/></w:r><w:r><w:br/></w:r></w:p><w:p w14:paraId="1D649054" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:tabs><w:tab w:val="center" w:pos="4536"/></w:tabs><w:ind w:firstLine="0"/><w:rPr><w:b/><w:sz w:val="40"/><w:szCs w:val="40"/></w:rPr><w:sectPr w:rsidR="00A815CE"><w:headerReference w:type="default" r:id="rId10"/><w:footerReference w:type="default" r:id="rId11"/><w:pgSz w:w="11907" w:h="16840"/><w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1701" w:header="720" w:footer="720" w:gutter="0"/><w:pgNumType w:start="1"/><w:cols w:space="720"/></w:sectPr></w:pPr><w:r><w:br w:type="page"/></w:r></w:p><w:p w14:paraId="3601A1EF" w14:textId="117DEA53" w:rsidR="00A815CE" w:rsidRDefault="00B56138"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:b/><w:sz w:val="36"/><w:szCs w:val="36"/></w:rPr></w:pPr><w:r><w:rPr><w:b/><w:sz w:val="36"/><w:szCs w:val="36"/></w:rPr><w:lastRenderedPageBreak/><w:t>TABLE OF CONTENTS
+<w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:tabs><w:tab w:val="right" w:pos="9062"/></w:tabs></w:pPr><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> TOC \h \u \z \t "Heading 1,1,Heading 2,2,Heading 3,3,"</w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r></w:p><w:p w14:paraId="777C6D6D" w14:textId="1C24914B" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:pBdr><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:tabs><w:tab w:val="right" w:pos="9062"/></w:tabs><w:rPr><w:rFonts w:ascii="Aptos" w:eastAsia="Aptos" w:hAnsi="Aptos" w:cs="Aptos"/><w:color w:val="000000"/><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr></w:pPr><w:r><w:fldChar w:fldCharType="end"/></w:r></w:p></w:sdtContent></w:sdt><w:p w14:paraId="7B7EE894" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:b/><w:sz w:val="36"/><w:szCs w:val="36"/></w:rPr></w:pPr><w:r><w:br w:type="page"/></w:r></w:p><w:p w14:paraId="6DEA0FFA" w14:textId="79AE286A" w:rsidR="00A815CE" w:rsidRDefault="00DA656B"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:b/><w:sz w:val="36"/><w:szCs w:val="36"/></w:rPr></w:pPr><w:r><w:rPr><w:b/><w:sz w:val="36"/><w:szCs w:val="36"/></w:rPr><w:lastRenderedPageBreak/><w:t>LIST OF ABBREVIATIONS
+<w:tblPr><w:tblStyle w:val="a1"/><w:tblW w:w="9062" w:type="dxa"/><w:tblBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:left w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:right w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:insideH w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:insideV w:val="single" w:sz="4" w:space="0" w:color="000000"/></w:tblBorders><w:tblLayout w:type="fixed"/><w:tblLook w:val="0400" w:firstRow="0" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="1"/></w:tblPr><w:tblGrid><w:gridCol w:w="805"/><w:gridCol w:w="3330"/><w:gridCol w:w="4927"/></w:tblGrid><w:tr w:rsidR="00A815CE" w14:paraId="45334898" w14:textId="77777777"><w:tc><w:tcPr><w:tcW w:w="805" w:type="dxa"/></w:tcPr><w:p w14:paraId="4773ECA5" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:b/></w:rPr></w:pPr><w:r><w:rPr><w:b/></w:rPr><w:t>STT
+<w:tcPr><w:tcW w:w="3330" w:type="dxa"/></w:tcPr><w:p w14:paraId="454A557A" w14:textId="20B72785" w:rsidR="00A815CE" w:rsidRDefault="00DA656B"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:b/></w:rPr></w:pPr><w:r><w:rPr><w:b/><w:bCs/></w:rPr><w:t>Abbreviation
+<w:tcPr><w:tcW w:w="4927" w:type="dxa"/></w:tcPr><w:p w14:paraId="4FBDF380" w14:textId="71E08EB5" w:rsidR="00A815CE" w:rsidRDefault="00DA656B"><w:pPr><w:ind w:firstLine="720"/><w:jc w:val="center"/><w:rPr><w:b/></w:rPr></w:pPr><w:r w:rsidRPr="008F264C"><w:rPr><w:b/><w:bCs/></w:rPr><w:t>Full Term
+<w:trPr><w:trHeight w:val="323"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="805" w:type="dxa"/></w:tcPr><w:p w14:paraId="5B74D9EA" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:b/></w:rPr></w:pPr><w:r><w:rPr><w:b/></w:rPr><w:t>1
+<w:tcPr><w:tcW w:w="3330" w:type="dxa"/></w:tcPr><w:p w14:paraId="2CD8D906" w14:textId="7AF9A64F" w:rsidR="00A815CE" w:rsidRDefault="00A815CE"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="4927" w:type="dxa"/></w:tcPr><w:p w14:paraId="160A8E0E" w14:textId="566E2C52" w:rsidR="00A815CE" w:rsidRDefault="00A815CE"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr></w:p></w:tc></w:tr><w:tr w:rsidR="00A815CE" w14:paraId="4BD74856" w14:textId="77777777"><w:trPr><w:trHeight w:val="341"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="805" w:type="dxa"/></w:tcPr><w:p w14:paraId="2C4EC6F8" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:b/></w:rPr></w:pPr><w:r><w:rPr><w:b/></w:rPr><w:t>2
+<w:tcPr><w:tcW w:w="3330" w:type="dxa"/></w:tcPr><w:p w14:paraId="6533E9D7" w14:textId="5BA716EF" w:rsidR="00A815CE" w:rsidRDefault="00A815CE"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="4927" w:type="dxa"/></w:tcPr><w:p w14:paraId="139EBD77" w14:textId="046627EA" w:rsidR="00A815CE" w:rsidRDefault="00A815CE"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr></w:p></w:tc></w:tr><w:tr w:rsidR="00A815CE" w14:paraId="7AE1C80D" w14:textId="77777777"><w:trPr><w:trHeight w:val="359"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="805" w:type="dxa"/></w:tcPr><w:p w14:paraId="1CFED75F" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:b/></w:rPr></w:pPr><w:r><w:rPr><w:b/></w:rPr><w:t>3
+<w:tcPr><w:tcW w:w="3330" w:type="dxa"/></w:tcPr><w:p w14:paraId="77991FF7" w14:textId="3427C42A" w:rsidR="00A815CE" w:rsidRDefault="00A815CE"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="4927" w:type="dxa"/></w:tcPr><w:p w14:paraId="486C395F" w14:textId="5E15DD0D" w:rsidR="00A815CE" w:rsidRDefault="00A815CE"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr></w:p></w:tc></w:tr><w:tr w:rsidR="00A815CE" w14:paraId="0CA458B9" w14:textId="77777777"><w:trPr><w:trHeight w:val="350"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="805" w:type="dxa"/></w:tcPr><w:p w14:paraId="42C4930F" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:b/></w:rPr></w:pPr><w:r><w:rPr><w:b/></w:rPr><w:t>4
+<w:tcPr><w:tcW w:w="3330" w:type="dxa"/></w:tcPr><w:p w14:paraId="0A4A7581" w14:textId="749D43F7" w:rsidR="00A815CE" w:rsidRDefault="00A815CE"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="4927" w:type="dxa"/></w:tcPr><w:p w14:paraId="658A7B2D" w14:textId="07CE1989" w:rsidR="00A815CE" w:rsidRDefault="00A815CE"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr></w:p></w:tc></w:tr><w:tr w:rsidR="00A815CE" w14:paraId="181B993C" w14:textId="77777777"><w:trPr><w:trHeight w:val="350"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="805" w:type="dxa"/></w:tcPr><w:p w14:paraId="17EC6FDA" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:b/></w:rPr></w:pPr><w:r><w:rPr><w:b/></w:rPr><w:t>5
+<w:tcPr><w:tcW w:w="3330" w:type="dxa"/></w:tcPr><w:p w14:paraId="648BABF9" w14:textId="0D3D5157" w:rsidR="00A815CE" w:rsidRDefault="00A815CE"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="4927" w:type="dxa"/></w:tcPr><w:p w14:paraId="5D516EFC" w14:textId="08B66022" w:rsidR="00A815CE" w:rsidRDefault="00A815CE"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr></w:p></w:tc></w:tr></w:tbl><w:p w14:paraId="75D2448C" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="left"/><w:rPr><w:b/></w:rPr></w:pPr><w:r><w:br w:type="page"/></w:r></w:p><w:p w14:paraId="11836BCF" w14:textId="77777777" w:rsidR="0070087F" w:rsidRDefault="0070087F" w:rsidP="0070087F"><w:pPr><w:tabs><w:tab w:val="left" w:pos="2310"/><w:tab w:val="center" w:pos="4536"/></w:tabs><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:b/><w:sz w:val="36"/><w:szCs w:val="36"/></w:rPr></w:pPr><w:r><w:rPr><w:b/><w:sz w:val="36"/><w:szCs w:val="36"/></w:rPr><w:lastRenderedPageBreak/><w:t>LIST OF FIGURES
+<w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:tabs><w:tab w:val="right" w:pos="9062"/></w:tabs><w:rPr><w:rFonts w:ascii="Aptos" w:eastAsia="Aptos" w:hAnsi="Aptos" w:cs="Aptos"/><w:color w:val="000000"/><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr></w:pPr><w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> TOC \h \u \z \t "Heading 1,1,Heading 2,2,Heading 3,3,Heading 4,4,Heading 5,5,Heading 6,6,"</w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r></w:p><w:p w14:paraId="372FF4E3" w14:textId="3123B84C" w:rsidR="00A815CE" w:rsidRDefault="00A815CE"><w:pPr><w:pBdr><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:tabs><w:tab w:val="right" w:pos="9062"/></w:tabs><w:rPr><w:rFonts w:ascii="Aptos" w:eastAsia="Aptos" w:hAnsi="Aptos" w:cs="Aptos"/><w:color w:val="000000"/><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr></w:pPr></w:p><w:p w14:paraId="45D2884C" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:ind w:left="-284" w:firstLine="0"/><w:jc w:val="left"/><w:rPr><w:b/><w:sz w:val="36"/><w:szCs w:val="36"/></w:rPr></w:pPr><w:r><w:fldChar w:fldCharType="end"/></w:r></w:p></w:sdtContent></w:sdt><w:p w14:paraId="38C3B1AA" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:ind w:firstLine="0"/><w:rPr><w:b/><w:sz w:val="36"/><w:szCs w:val="36"/></w:rPr></w:pPr><w:r><w:br w:type="page"/></w:r></w:p><w:p w14:paraId="1FC19F75" w14:textId="620F01FA" w:rsidR="00972EAD" w:rsidRDefault="00972EAD" w:rsidP="00972EAD"><w:pPr><w:pBdr><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:tabs><w:tab w:val="right" w:pos="9062"/></w:tabs><w:jc w:val="center"/></w:pPr><w:r><w:rPr><w:b/><w:sz w:val="36"/><w:szCs w:val="36"/></w:rPr><w:lastRenderedPageBreak/><w:t>LIST OF TABLES
+<w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:tabs><w:tab w:val="right" w:pos="9062"/></w:tabs></w:pPr></w:p><w:p w14:paraId="41E7FC01" w14:textId="3CA80EDC" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:pBdr><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:tabs><w:tab w:val="right" w:pos="9062"/></w:tabs><w:rPr><w:rFonts w:ascii="Aptos" w:eastAsia="Aptos" w:hAnsi="Aptos" w:cs="Aptos"/><w:color w:val="000000"/><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:pPr></w:p></w:sdtContent></w:sdt><w:p w14:paraId="7BBB9CAF" w14:textId="0A6D4719" w:rsidR="00A815CE" w:rsidRDefault="00972EAD"><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:bookmarkStart w:id="0" w:name="_heading=h.fee2vhjxrzlt" w:colFirst="0" w:colLast="0"/><w:bookmarkEnd w:id="0"/><w:r><w:br w:type="column"/></w:r><w:r><w:lastRenderedPageBreak/><w:t>INTRODUCTION
+I. 
+Introduction to the Topic
+: 
+Building an Intrusion Detection System using Machine Learning
+In the context of rapid advancements in information technology, network systems are becoming increasingly complex and play a vital role in various fields such as business, education, and management. However, alongside this growth comes a rising risk of cyberattacks, unauthorized access, and data breaches. This creates an urgent need for effective security systems capable of detecting and preventing malicious activities in a timely manner.
+An Intrusion Detection System (IDS) is one of the key solutions in cybersecurity, responsible for monitoring and analyzing network traffic or system activities to identify potential threats. However, traditional approaches often face limitations in detecting novel or sophisticated attack patterns.
+With the development of Machine Learning, models can learn from data and recognize abnormal behavior more effectively. Applying Machine Learning to IDS enhances detection accuracy, reduces false positives, and improves adaptability to emerging threats.
+The topic “Building an Intrusion Detection System using Machine Learning” aims to study and develop an intelligent IDS that utilizes machine learning algorithms to classify and detect intrusion activities within a network. The system is expected to improve detection performance, strengthen security, and contribute to protecting information in modern digital environments.
+II. 
+Research Objectives and Methodology
+Retionale for the study
+With the rapid growth of information technology and the increasing dependence on computer networks, cybersecurity has become a major concern for organizations and individuals. Modern network systems constantly face various cyber threats such as Distributed Denial of Service (DDoS) attacks, malware, phishing, unauthorized access, and other malicious activities. These attacks are becoming more sophisticated and difficult to detect using traditional security mechanisms.
+Conventional security solutions, such as firewalls, mainly focus on controlling network access and filtering traffic based on predefined rules. However, they are often ineffective against advanced or previously unseen attacks. As a result, Intrusion Detection Systems (IDS) have become an essential component in modern cybersecurity infrastructures due to their ability to monitor network traffic and detect suspicious activities in real time.
+In recent years, Machine Learning (ML) techniques have been widely applied in IDS research because of their capability to analyze large-scale network data and identify complex attack patterns automatically. ML-based IDS can improve detection accuracy, support anomaly detection, and adapt to evolving cyber threats more effectively than traditional approaches.
+Therefore, this study focuses on developing a Machine Learning-based Intrusion Detection System capable of detecting and classifying malicious network traffic. The project also aims to explore data preprocessing techniques, feature engineering methods, and multiple Machine Learning algorithms to improve detection performance and reduce false alarms in network security systems.
+Research Objectives
+The main objective of this study is to develop an Intrusion Detection System (IDS) capable of improving network security through attack detection and traffic monitoring. The project focuses on applying modern technologies to analyze network traffic and enhance the effectiveness of intrusion detection systems.
+The specific objectives of this study include:
+Studying the fundamental concepts of Intrusion Detection Systems and cybersecurity threats. 
+Exploring the application of modern technologies in intrusion detection and network security. 
+Analyzing network traffic behaviors and identifying suspicious activities. 
+Designing and implementing an IDS for detecting network intrusions. 
+Evaluating the effectiveness and performance of the proposed system in detecting cyber attacks. 
+Improving the reliability and efficiency of intrusion detection systems in modern network environments.
+Research Subject and Scope
+Research Subject: The research focuses on Intrusion Detection Systems (IDS) and their role in network security. The study also examines cyber threats, network traffic analysis, and intrusion detection techniques used to identify malicious activities in computer networks. In addition, the project explores the application of modern technologies such as machine learning and real-time monitoring systems in cybersecurity environments.
+Research Scope: The scope of this project is the development of a Network-based Intrusion Detection System (NIDS) for monitoring and analyzing network traffic. The system is designed to detect malicious activities and common cyberattacks by combining intrusion detection techniques with data analysis methods.
+The project also focuses on evaluating detection performance, system effectiveness, and real-time alert generation capabilities to improve network security monitoring and incident response.
+Research Methodolody 
+Literature review: Studying existing research, documents, and technologies related to Intrusion Detection Systems (IDS), network security, Machine Learning techniques, and cybersecurity monitoring systems. 
+System design: Designing the architecture of the proposed IDS, defining the data processing flow, and identifying the main components of the system. 
+Implementation: Developing the intrusion detection system by applying data preprocessing techniques, feature engineering methods, and Machine Learning algorithms for network traffic analysis and attack detection. The system also supports realtime monitoring and alert generation. 
+Testing and evaluation: Conducting experiments using network traffic datasets to evaluate system performance based on metrics such as detection accuracy, precision, recall, F1-score, false positive rate, and overall detection effectiveness.
+Scientific and Practical Significance
+Scientific Significance
+:
+Contributing to the research and application of Intrusion Detection Systems (IDS) in cybersecurity by studying methods used to detect malicious activities and network intrusions. 
+Exploring the application of Machine Learning techniques in cybersecurity, especially in analyzing network traffic and improving attack detection capabilities. 
+Supporting research on network traffic analysis and cyberattack detection through the use of data processing and anomaly detection methods. 
+Providing insights into intrusion detection technologies, network monitoring systems, and modern cybersecurity approaches used in real-world environments. 
+Enhancing understanding of how signature-based detection and machine learning-based detection can be integrated into a hybrid IDS model. 
+Practical Significance
+:
+Supporting real-time monitoring and intrusion detection in network environments through continuous analysis of network traffic and suspicious activities. 
+Improving network security by helping organizations detect cyber threats early and reduce risks caused by malicious attacks. 
+Assisting administrators in identifying suspicious behaviors, unauthorized access attempts, and abnormal network traffic more efficiently. 
+Providing alert generation and attack monitoring mechanisms that support faster incident response and security management. 
+Offering practical experience in cybersecurity, data analysis, machine learning, and system development through the implementation of an IDS framework. 
+Demonstrating the practical application of technologies such as Snort 3, Machine Learning, and Docker Compose in building modern network security systems.
+IV. 
+Implementation Plan
+<w:tblPr><w:tblStyle w:val="a2"/><w:tblW w:w="9351" w:type="dxa"/><w:jc w:val="center"/><w:tblBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:left w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:right w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:insideH w:val="single" w:sz="4" w:space="0" w:color="000000"/><w:insideV w:val="single" w:sz="4" w:space="0" w:color="000000"/></w:tblBorders><w:tblLayout w:type="fixed"/><w:tblLook w:val="0400" w:firstRow="0" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="1"/></w:tblPr><w:tblGrid><w:gridCol w:w="1814"/><w:gridCol w:w="4418"/><w:gridCol w:w="3119"/></w:tblGrid><w:tr w:rsidR="00A815CE" w14:paraId="1E468B96" w14:textId="77777777" w:rsidTr="00EA7340"><w:trPr><w:jc w:val="center"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="1814" w:type="dxa"/><w:vAlign w:val="bottom"/></w:tcPr><w:p w14:paraId="274D37E3" w14:textId="17C4B19A" w:rsidR="00A815CE" w:rsidRDefault="000B3305"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:jc w:val="center"/><w:rPr><w:b/><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:b/><w:szCs w:val="26"/></w:rPr><w:lastRenderedPageBreak/><w:t>Timeline
+<w:tcPr><w:tcW w:w="4418" w:type="dxa"/><w:vAlign w:val="bottom"/></w:tcPr><w:p w14:paraId="5865DA5A" w14:textId="77363E59" w:rsidR="00A815CE" w:rsidRDefault="000B3305"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:jc w:val="center"/><w:rPr><w:b/><w:szCs w:val="26"/></w:rPr></w:pPr><w:r w:rsidRPr="000B3305"><w:rPr><w:b/><w:bCs/><w:szCs w:val="26"/></w:rPr><w:t>Work Description
+<w:tcPr><w:tcW w:w="3119" w:type="dxa"/></w:tcPr><w:p w14:paraId="56769532" w14:textId="1D28153B" w:rsidR="00A815CE" w:rsidRDefault="000B3305"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:jc w:val="center"/><w:rPr><w:b/><w:szCs w:val="26"/></w:rPr></w:pPr><w:r w:rsidRPr="000B3305"><w:rPr><w:b/><w:szCs w:val="26"/></w:rPr><w:t xml:space="preserve">Prepared 
+B
+y
+<w:trPr><w:trHeight w:val="2725"/><w:jc w:val="center"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="1814" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="1365CCF7" w14:textId="1DA5F56B" w:rsidR="00A815CE" w:rsidRDefault="000B3305"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:jc w:val="center"/><w:rPr><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr></w:pPr><w:r><w:rPr><w:b/><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr><w:t>Week 1
+(Mar 1
+1
+-Mar 
+17
+)
+<w:tcPr><w:tcW w:w="4418" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="030297D1" w14:textId="30963C0F" w:rsidR="000B3305" w:rsidRPr="000B3305" w:rsidRDefault="000B3305"><w:pPr><w:pStyle w:val="ListParagraph"/><w:numPr><w:ilvl w:val="0"/><w:numId w:val="3"/></w:numPr><w:ind w:left="0" w:firstLine="284"/><w:rPr><w:szCs w:val="26"/><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="000B3305"><w:rPr><w:szCs w:val="26"/><w:lang w:val="en-GB"/></w:rPr><w:t xml:space="preserve">Search for and select the project topic. 
+The supervisor and student agree on the topic, content, and plan for developing the project proposal. 
+Study and research the overview and theoretical background of the topic. 
+Submit the proposal to the system.
+<w:tcPr><w:tcW w:w="3119" w:type="dxa"/></w:tcPr><w:p w14:paraId="6405584E" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00A815CE"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:ind w:firstLine="0"/><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr></w:p><w:p w14:paraId="3C19A41E" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00A815CE"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:ind w:firstLine="0"/><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr></w:p><w:p w14:paraId="3EB9EF6F" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:ind w:firstLine="0"/><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:szCs w:val="26"/></w:rPr><w:t xml:space="preserve">   Huỳnh Văn Trường Hải
+<w:tab w:val="left" w:pos="9900"/></w:tabs><w:ind w:firstLine="0"/><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:szCs w:val="26"/></w:rPr><w:t xml:space="preserve">   Trần Đình Hưng Thịnh
+<w:trPr><w:trHeight w:val="1578"/><w:jc w:val="center"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="1814" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="4344CAAB" w14:textId="3C789ABD" w:rsidR="00A815CE" w:rsidRDefault="000B3305"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr></w:pPr><w:r><w:rPr><w:b/><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr><w:t>Week 2,3
+(Mar 
+18
+- Mar 
+31
+)
+<w:tcPr><w:tcW w:w="4418" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="4277A3FB" w14:textId="6D11D483" w:rsidR="00D97AF4" w:rsidRPr="00D97AF4" w:rsidRDefault="00D97AF4"><w:pPr><w:pStyle w:val="ListParagraph"/><w:numPr><w:ilvl w:val="0"/><w:numId w:val="4"/></w:numPr><w:ind w:left="0" w:firstLine="284"/><w:rPr><w:szCs w:val="26"/><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00D97AF4"><w:rPr><w:szCs w:val="26"/><w:lang w:val="en-GB"/></w:rPr><w:t xml:space="preserve">Conduct data exploration, analysis, and preprocessing of the sample data. 
+Design the overall system architecture and develop the data storage structure
+<w:tcPr><w:tcW w:w="3119" w:type="dxa"/></w:tcPr><w:p w14:paraId="054ED55C" w14:textId="77777777" w:rsidR="00BB6CC4" w:rsidRDefault="00BB6CC4" w:rsidP="00D97AF4"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr></w:p><w:p w14:paraId="5DAFBD26" w14:textId="0EC3B6F7" w:rsidR="00D97AF4" w:rsidRDefault="00D97AF4" w:rsidP="00D97AF4"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:szCs w:val="26"/></w:rPr><w:t>Huỳnh Văn Trường Hải
+<w:tab w:val="left" w:pos="9900"/></w:tabs><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:szCs w:val="26"/></w:rPr><w:t>Trần Đình Hưng Thịnh
+<w:trPr><w:trHeight w:val="977"/><w:jc w:val="center"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="1814" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="26E972A9" w14:textId="208D15B2" w:rsidR="00A815CE" w:rsidRDefault="00D97AF4"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr></w:pPr><w:r><w:rPr><w:b/><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr><w:t>Week 4, 5
+(Apr 1
+–Apr 
+14
+)
+<w:tcPr><w:tcW w:w="4418" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="12B59CE9" w14:textId="40E2E2AD" w:rsidR="00A815CE" w:rsidRDefault="006B6E28"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr><w:r w:rsidRPr="006B6E28"><w:rPr><w:szCs w:val="26"/></w:rPr><w:t>Build, train, and evaluate machine learning models suitable for the problem.
+<w:tcPr><w:tcW w:w="3119" w:type="dxa"/></w:tcPr><w:p w14:paraId="6D80A6BC" w14:textId="77777777" w:rsidR="006B6E28" w:rsidRDefault="006B6E28" w:rsidP="006B6E28"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:szCs w:val="26"/></w:rPr><w:t>Huỳnh Văn Trường Hải
+<w:tab w:val="left" w:pos="9900"/></w:tabs><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:szCs w:val="26"/></w:rPr><w:t xml:space="preserve">Trần Đình Hưng Thịnh 
+<w:trPr><w:trHeight w:val="705"/><w:jc w:val="center"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="1814" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="6B561A0A" w14:textId="4BBB87EF" w:rsidR="00A815CE" w:rsidRDefault="006B6E28"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr></w:pPr><w:r><w:rPr><w:b/><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr><w:t>Week 6
+ 
+(Apr 15- Apr 21)
+<w:tcPr><w:tcW w:w="4418" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="6131D0DD" w14:textId="4C4A031B" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:szCs w:val="26"/></w:rPr><w:t xml:space="preserve">- 
+Evaluate and compare the performance of models using scientific metrics to select the optimal solution.
+<w:tcPr><w:tcW w:w="3119" w:type="dxa"/></w:tcPr><w:p w14:paraId="4F26A964" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:szCs w:val="26"/></w:rPr><w:t>Huỳnh Văn Trường Hải
+<w:tab w:val="left" w:pos="9900"/></w:tabs><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:szCs w:val="26"/></w:rPr><w:t>Trần Đình Hưng Thịnh
+<w:trPr><w:trHeight w:val="705"/><w:jc w:val="center"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="1814" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="6701FE40" w14:textId="1332D8E1" w:rsidR="00A815CE" w:rsidRDefault="004E7C7C"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr></w:pPr><w:r><w:rPr><w:b/><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr><w:t>Week 7
+(Apr 22-Apr 28)
+<w:tcPr><w:tcW w:w="4418" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="5283D8A8" w14:textId="1CD83640" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:jc w:val="left"/><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:szCs w:val="26"/></w:rPr><w:t xml:space="preserve">- 
+Continue developing and refining the necessary functionalities.
+<w:tcPr><w:tcW w:w="3119" w:type="dxa"/></w:tcPr><w:p w14:paraId="271B8517" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:szCs w:val="26"/></w:rPr><w:t>Huỳnh Văn Trường Hải
+<w:tab w:val="left" w:pos="9900"/></w:tabs><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:szCs w:val="26"/></w:rPr><w:t>Trần Đình Hưng Thịnh
+<w:trPr><w:trHeight w:val="986"/><w:jc w:val="center"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="1814" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="2C5FEEC9" w14:textId="0F2AD97B" w:rsidR="00A815CE" w:rsidRDefault="00BB6CC4"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:b/><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr><w:t>Week 8
+(Apr 29-May 6)
+<w:tcPr><w:tcW w:w="4418" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="166AC16A" w14:textId="4D564438" w:rsidR="00BB6CC4" w:rsidRPr="00BB6CC4" w:rsidRDefault="00BB6CC4" w:rsidP="00BB6CC4"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:szCs w:val="26"/></w:rPr><w:t>-
+Test and finalize the product. 
+<w:tab w:val="left" w:pos="9900"/></w:tabs><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:szCs w:val="26"/></w:rPr><w:t>-
+Prepare presentation slides and the final report.
+<w:tcPr><w:tcW w:w="3119" w:type="dxa"/></w:tcPr><w:p w14:paraId="079DD489" w14:textId="77777777" w:rsidR="00BB6CC4" w:rsidRDefault="00BB6CC4" w:rsidP="00BB6CC4"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:szCs w:val="26"/></w:rPr><w:t>Huỳnh Văn Trường Hải
+<w:tab w:val="left" w:pos="9900"/></w:tabs><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:szCs w:val="26"/></w:rPr><w:t>Trần Đình Hưng Thịnh
+<w:trPr><w:trHeight w:val="705"/><w:jc w:val="center"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="1814" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="2A4DA1C8" w14:textId="15829D33" w:rsidR="00A815CE" w:rsidRDefault="00BB6CC4"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:b/><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr></w:pPr><w:r w:rsidRPr="00BB6CC4"><w:rPr><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr><w:t>Week 9
+(May 7- May 14)
+<w:tcPr><w:tcW w:w="4418" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="7F444B39" w14:textId="196AD49A" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:szCs w:val="26"/></w:rPr><w:t xml:space="preserve">- 
+Submit the product to the system.
+<w:tcPr><w:tcW w:w="3119" w:type="dxa"/></w:tcPr><w:p w14:paraId="6E3B26E5" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:tabs><w:tab w:val="left" w:pos="9900"/></w:tabs><w:rPr><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:szCs w:val="26"/></w:rPr><w:t>Trần Đình Hưng Thịnh
+V. 
+Structure of Project
+- Phần mở đầu:
+Giới thiệu về mục đích, ý nghĩa, lý do chọn đề tài; Tổng quan tình hình nghiên cứu của đề tài.
+- Chương 1: Cơ sở lý thuyết:
+Cơ sở lý thuyết và các công cụ sử dụng trong quá trình thực hiện.
+- Chương 2: Phân tích và thiết kế hệ thống:
+Chương này trình bày tổng quan về các yêu cầu của hệ thống. Bên cạnh đó, phần thiết kế hệ thống cũng được mô tả chi tiết.
+- Chương 3: Thiết kế ứng dụng:
+Chương này trình bày chi tiết các phần thiết kế của hệ thống.
+- Chương 4: Cài đặt và kết quả thực nghiệm:
+Tổng kết lại kết quả và quá trình thử nghiệm sản phẩm
+- Phần kết luận.
+CH
+AP 1. THEORETICAL BACKGROUND
+Overview of Intrusion detection system (IDS): 
+Definition of Intrusion Detection System
+An Intrusion Detection System (IDS) is a security system designed to monitor network traffic, system activities, and communication behaviors in order to detect malicious activities, unauthorized access, or violations of security policies. IDS plays an important role in modern cybersecurity by helping organizations identify potential threats and respond to attacks in a timely manner.
+The main objective of an IDS is to analyze network packets and system events to determine whether suspicious behavior exists within the monitored environment. When abnormal or malicious activities are detected, the system generates alerts for administrators, allowing them to investigate and take appropriate countermeasures. IDS can detect various types of cyberattacks, including denial-of-service (DoS) attacks, port scanning, malware communication, unauthorized access attempts, and other network intrusions.
+In network security, IDS serves as an additional layer of defense that complements traditional security mechanisms such as firewalls and access control systems. While firewalls mainly filter traffic based on predefined rules, IDS focuses on monitoring and analyzing traffic patterns to identify potential attacks that may bypass preventive security measures. By continuously monitoring network activities, IDS improves network visibility, enhances incident response capabilities, and helps reduce the impact of cyber threats.
+With the increasing complexity of modern cyberattacks, IDS has become an essential component in cybersecurity infrastructures. In this project, IDS is implemented by combining the rule-based detection capability of Snort 3 with machine learning techniques to improve attack detection accuracy and support real-time network monitoring.
+Classification of IDS
+I
+ntrusion Detection Systems (IDS) can be classified into two main types based on their monitoring scope: Network-based IDS (NIDS) and Host-based IDS (HIDS). Each type provides different approaches for detecting malicious activities in computer systems and networks.
+1.1.2.1
+. 
+Network-based IDS (NIDS
+)
+A Network-based Intrusion Detection System (NIDS) is designed to monitor and analyze network traffic in order to detect suspicious activities or cyberattacks. NIDS is commonly deployed at important points within a network, such as gateways or switches, where it can inspect incoming and outgoing packets.
+The system analyzes packet headers, protocols, and traffic patterns to identify malicious behaviors such as port scanning, denial-of-service attacks, or unauthorized access attempts.
+Common examples of NIDS include:
+ Snort and Suricata
+1.
+1.2.2 Host-based IDS (HIDS)
+ 
+A Host-based Intrusion Detection System (HIDS) monitors activities within a specific host or endpoint device. Unlike NIDS, HIDS focuses on internal system behaviors such as log files, system calls, file integrity, and user activities.
+HIDS can detect unauthorized file modifications, suspicious processes, and abnormal system behaviors occurring inside the host.
+Common examples of HIDS include:
+OSSEC 
+Wazuh 
+HIDS is widely used to enhance endpoint security and provide detailed monitoring of system-level activities.
+ 
+Attack Detection Methods
+Modern IDS systems usually work based on two core methods to identify network security threats:
+Signature-Based Detection: This method uses unique identifiers (like malware hashes) to find known threats. The system compares network data with a signature library to identify malware trying to enter. The advantage of this method is fast speed and high accuracy for known attacks. However, it cannot detect new threats (zero-day). 
+Anomaly-Based Detection: This method focuses on building a model of normal behavior (baseline) for the system or network traffic. Then, the system monitors and detects any changes from this baseline to warn about potential attacks. While it can find unknown attacks, this method needs many computing resources and can cause false alerts if normal user behavior changes suddenly. 
+Hybrid detection combines both signature-based and anomaly-based approaches to improve overall detection performance. In this method, signature-based techniques are used to detect known attacks, while anomaly-based techniques are applied to identify unknown or abnormal behaviors.
+1.1.4 Operating Process of an IDS System
+An Intrusion Detection System (IDS) operates through a continuous monitoring cycle to detect suspicious or malicious activities within a network or host system. In general, the operating process of an IDS can be divided into four main stages:
+Traffic and Data Collection Stage:
+ 
+In this stage, the IDS captures network packets or collects system and application logs from monitored devices. For a Network-based IDS (NIDS), packet traffic is captured directly from the network, while a Host-based IDS (HIDS) gathers information such as system logs, file activities, and user behaviors. The collected data serves as the input for the detection process. 
+Preprocessing and Analysis Stage:
+ 
+After data collection, the IDS preprocesses and analyzes the captured information. Raw traffic data may be decoded, filtered, normalized, or transformed into meaningful features. The system then applies detection techniques such as signature-based detection to identify known attack patterns or anomaly-based detection to detect abnormal behaviors that differ from normal traffic patterns. 
+Detection and Alert Stage: If suspicious or malicious activities are identified during the analysis stage, the IDS generates alerts or notifications for administrators. The alerts may contain information about the attack type, source address, target system, timestamp, and severity level. In some integrated systems, alerts can also trigger automated responses or be forwarded to monitoring dashboards. 
+Logging and Reporting Stage: Finally, all detection results, alerts, and traffic records are stored for further investigation and analysis. Logging and reporting help security administrators review incidents, generate security reports, and improve future detection performance by reducing false positives and enhancing detection rules or machine learning models. 
+The overall operating process enables IDS systems to provide continuous monitoring and early detection of cyber attacks, thereby improving network security and minimizing potential damage caused by intrusions.
+1.1.
+5
+. What is the difference between IDS and IPS
+First, IDS is a network traffic analysis system to find information that matches known attack patterns. IPS, on the other hand, has the ability to analyze packets and prevent packet delivery based on the types of attacks detected by the system. From there, attacks on the system can be quickly prevented.
+Both IDS and IPS belong to the network infrastructure, and both compare network packets to a cyberthreat database that contains the known signatures of the cyberattack. Then mark every packet that matches the known patterns and warn the system admin.
+<w:tblPr><w:tblStyle w:val="TableGrid"/><w:tblW w:w="0" w:type="auto"/><w:tblLook w:val="04A0" w:firstRow="1" w:lastRow="0" w:firstColumn="1" w:lastColumn="0" w:noHBand="0" w:noVBand="1"/></w:tblPr><w:tblGrid><w:gridCol w:w="4531"/><w:gridCol w:w="4531"/></w:tblGrid><w:tr w:rsidR="00DC4887" w14:paraId="53E97F59" w14:textId="77777777" w:rsidTr="00DC4887"><w:tc><w:tcPr><w:tcW w:w="4531" w:type="dxa"/></w:tcPr><w:p w14:paraId="36FE9709" w14:textId="4DB83A00" w:rsidR="00DC4887" w:rsidRPr="00C67D30" w:rsidRDefault="00DC4887" w:rsidP="00C67D30"><w:pPr><w:jc w:val="center"/><w:rPr><w:b/><w:bCs/></w:rPr></w:pPr><w:r w:rsidRPr="00C67D30"><w:rPr><w:b/><w:bCs/></w:rPr><w:t>IDS
+<w:tcPr><w:tcW w:w="4531" w:type="dxa"/></w:tcPr><w:p w14:paraId="5FF4F861" w14:textId="569952D3" w:rsidR="00DC4887" w:rsidRPr="00C67D30" w:rsidRDefault="00DC4887" w:rsidP="00C67D30"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:b/><w:bCs/><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00C67D30"><w:rPr><w:b/><w:bCs/><w:lang w:val="en-GB"/></w:rPr><w:t>IPS
+<w:tc><w:tcPr><w:tcW w:w="4531" w:type="dxa"/></w:tcPr><w:p w14:paraId="3FC75891" w14:textId="7A923A93" w:rsidR="00DC4887" w:rsidRDefault="00C67D30" w:rsidP="00DC4887"><w:pPr><w:ind w:firstLine="0"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00C67D30"><w:t>Detects attacks
+<w:tcPr><w:tcW w:w="4531" w:type="dxa"/></w:tcPr><w:p w14:paraId="5D9D8758" w14:textId="1D78C679" w:rsidR="00DC4887" w:rsidRDefault="00C67D30" w:rsidP="00DC4887"><w:pPr><w:ind w:firstLine="0"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00C67D30"><w:t>Detects and blocks attacks
+<w:tc><w:tcPr><w:tcW w:w="4531" w:type="dxa"/></w:tcPr><w:p w14:paraId="58C6CA0F" w14:textId="01C0EEE6" w:rsidR="00DC4887" w:rsidRDefault="00C67D30" w:rsidP="00DC4887"><w:pPr><w:ind w:firstLine="0"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00C67D30"><w:t>Passive system
+<w:tcPr><w:tcW w:w="4531" w:type="dxa"/></w:tcPr><w:p w14:paraId="5D427C30" w14:textId="3D369488" w:rsidR="00DC4887" w:rsidRDefault="00C67D30" w:rsidP="00DC4887"><w:pPr><w:ind w:firstLine="0"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00C67D30"><w:t>Active system
+<w:tc><w:tcPr><w:tcW w:w="4531" w:type="dxa"/></w:tcPr><w:p w14:paraId="3D8FF2AA" w14:textId="6DE21858" w:rsidR="00DC4887" w:rsidRDefault="00C67D30" w:rsidP="00DC4887"><w:pPr><w:ind w:firstLine="0"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00C67D30"><w:t>Generates alerts
+<w:tcPr><w:tcW w:w="4531" w:type="dxa"/></w:tcPr><w:p w14:paraId="565D367A" w14:textId="62F2F095" w:rsidR="00DC4887" w:rsidRDefault="00C67D30" w:rsidP="00DC4887"><w:pPr><w:ind w:firstLine="0"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00C67D30"><w:t>Prevents malicious traffic
+<w:tc><w:tcPr><w:tcW w:w="4531" w:type="dxa"/></w:tcPr><w:p w14:paraId="01899365" w14:textId="4ABFB565" w:rsidR="00DC4887" w:rsidRDefault="00C67D30" w:rsidP="00DC4887"><w:pPr><w:ind w:firstLine="0"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00C67D30"><w:t>Monitors network activities
+<w:tcPr><w:tcW w:w="4531" w:type="dxa"/></w:tcPr><w:p w14:paraId="15E83454" w14:textId="3DBC0E52" w:rsidR="00DC4887" w:rsidRDefault="00C67D30" w:rsidP="00DC4887"><w:pPr><w:ind w:firstLine="0"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00C67D30"><w:t>Automatically takes protective actions
+<w:tc><w:tcPr><w:tcW w:w="4531" w:type="dxa"/></w:tcPr><w:p w14:paraId="23F58F0A" w14:textId="1FD6FC43" w:rsidR="00DC4887" w:rsidRDefault="00C67D30" w:rsidP="00DC4887"><w:pPr><w:ind w:firstLine="0"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00C67D30"><w:t>Does not directly stop attacks
+<w:tcPr><w:tcW w:w="4531" w:type="dxa"/></w:tcPr><w:p w14:paraId="1E7D49AA" w14:textId="1216262E" w:rsidR="00DC4887" w:rsidRDefault="00C67D30" w:rsidP="00DC4887"><w:pPr><w:ind w:firstLine="0"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00C67D30"><w:t>Can block or drop suspicious packets
+Figure  . Comparision difference between IDS and IPS
+The main difference between the two solutions is: IDS is a monitoring system, while IPS is a control system.
+IDS does not change network packets, while IPS prevents sending packets based on its contents. In terms of operating principle, IPS is similar to firewalls (brick walls that block traffic with IP addresses).
+IDS: Segment and monitor network traffic for signs of cyberattacks. The system compares current network activity to an available database to identify suspicious behavior such as policy violations, malware, or port scanners. 
+IPS: Located in the same area as the firewall on the infrastructure (between the environment you are in addition to the network in). IPS actively blocks traffic based on a specific security profile. 
+Most IDS/IPS service providers integrate new IPS systems with firewalls to set up UTM (Unified Threat Management) technology – capable of combining the functions of IDS and IPS into a single unit.
+Generally, both IDS and IPS read network packets and compare the contents with an available database. The difference lies only in the subsequent process: IDS detects and monitors the traffic without taking any specific action on its own.
+IPS – a control system – will decide whether to receive or drop network packets based on a predetermined set of rules. Therefore, IDS needs another person or system to monitor the results and determine the actions to be taken.
+However, it should be noted that IDS/IPS is only really effective if there is a good enough database set. Therefore, always update your database with more data and new rules, to best protect your system.
+1.
+1.6 Importance of IDS and IPS
+</w:r><w:bookmarkStart w:id="6" w:name="_heading=h.5tzyqpqxxmsd" w:colFirst="0" w:colLast="0"/><w:bookmarkEnd w:id="6"/><w:r w:rsidR="007B17E8" w:rsidRPr="003D17F2"><w:rPr><w:lang w:val="en-GB"/></w:rPr><w:t>Intrusion Detection Systems (IDS) and Intrusion Prevention Systems (IPS) are important components in modern cybersecurity infrastructures. These systems help organizations monitor network activities, detect cyber threats, and improve overall network security.
+Network Monitoring: IDS and IPS continuously monitor network traffic and system activities to identify suspicious behaviors and unauthorized access attempts in real time.
+Early Attack Detection: These systems help detect malicious activities at an early stage, allowing administrators to respond quickly before attacks cause serious damage.
+Reducing Security Damage: IDS generates alerts when threats are detected, while IPS can automatically block malicious traffic. This helps reduce the impact of cyberattacks on systems and sensitive data.
+Improving Incident Response: IDS and IPS provide detailed logs and attack information that support security analysis, investigation, and incident response processes.
+1.
+1.7 Advantages and Disadvantages of IDS
+Intrusion Detection Systems (IDS) provide many benefits for improving network security. However, IDS also has several limitations that need to be considered during deployment and operation.
+Advantages
+Real-time Monitoring: IDS continuously monitors network traffic and system activities to detect suspicious behavior quickly. 
+Attack Visibility: IDS provides detailed information about attacks and suspicious traffic, helping administrators understand security threats. 
+Automated Alerting: IDS automatically generates alerts when malicious activities are detected, supporting faster incident response. 
+Disadvantages
+False Positives: Legitimate activities may sometimes be incorrectly detected as attacks, increasing administrative workload. 
+Resource Consumption: IDS can consume considerable CPU, memory, and network resources in large-scale environments. 
+Encrypted Traffic Limitation: IDS may have difficulty analyzing encrypted traffic, which can reduce detection accuracy.
+Introduction to Snort 3
+Definition and Architecture of Snort 3
+Snort 
+is an open-source network intrusion detection and prevention system (IDS/IPS) developed by Cisco. Snort 3, also known as Snort++, is a comprehensive upgrade of Snort 2 with significant improvements in performance, flexibility, and scalability.
+Snort 3 is designed to:
+Real-time network traffic analysis. 
+Detect suspicious network traffic or attack behavior based on patterns (rules). 
+Better integration with modern tools and improved user experience.
+Snort 3 has a more modular, flexible and extensible architecture than Snort 2. Here are the main components in the architecture:
+Packet Decoder
+:
+Objective: Decode packets from network traffic at the Data Link Layer. 
+Determines the packet type (IP, TCP, UDP, ICMP, etc.) and forwards it to the next processing module. 
+ Preprocessor
+:
+Detect and handle anomalies in network data, such as packet fragments or unusual headers. 
+The preprocessing module supports data normalization and preparation before sending it to the analysis engine. 
+Detection Engine
+:
+The heart of Snort, where packets are compared against patterns (rules) to detect suspicious behavior or attacks. 
+Use the techniques: signature-based pattern matching, anomaly-based detection. 
+Supports optimized pattern matching with thousands of rules to increase performance. 
+Output Plugins
+Record information about detected events and transmit it to external systems. 
+Supports exporting data to log files (JSON, CSV, etc.), databases, or sending to analytics tools like Logstash, Splunk, and Elasticsearch. 
+Configuration Framework: Uses YAML syntax which is more intuitive and flexible than traditional Snort 2 configuration. 
+Expansion Module:Snort 3 supports plugins and extension modules, allowing integration of new technologies or custom tools according to user requirements.
+How Snort 3 Works
+The operational workflow of Snort 3 follows a structured pipeline designed to process and analyze network traffic efficiently through five distinct phases:
+Packet Capture Phase: Snort 3 uses libraries like libpcap to capture network traffic directly from network interfaces. 
+Packet Decoding
+:
+Analyze each packet to determine the protocol, source/destination address, and header information. 
+For example: Drop invalid or corrupted packets. 
+Preprocessing Stage
+:
+Process packets to normalize and concatenate related data. 
+For example: Reconstruct TCP streams to analyze HTTP traffic or detect attack signatures hidden in fragmented packets. 
+Detection Phase
+:
+Compare packets with rules defined in Snort. 
+Rules include conditions such as: IP address, port, protocol, or payload content. 
+Output Phase:Alerts and information are logged or forwarded to external analytics tools like Elasticsearch and Logstash.
+Snort 3 Rules
+Snort 3 uses rule-based detection to identify malicious traffic and suspicious network activities. A Snort rule defines conditions used to analyze packets and generate alerts when matching traffic is detected.
+Example of a Snort 3 rule:
+alert tcp any any -&gt; any 80 (msg:"HTTP attack detected"; sid:1000001;)
+Rule components:
+Action: alert generates an alert when the rule is matched. 
+Protocol: tcp specifies the TCP protocol. 
+Source/Destination: any any -&gt; any 80 defines the traffic direction, source, and destination port. 
+Message (msg): Displays the alert message. 
+Signature ID (sid): Unique identifier for the rule. 
+Snort rules are important for detecting known attacks and monitoring network traffic in real time.
+Applications of Snort 
+3
+Intrusion Detection: Snort 3 is used to detect cyberattacks, unauthorized access attempts, and suspicious network activities in real time. 
+Traffic Monitoring: The system continuously monitors and analyzes network traffic to identify abnormal behaviors. 
+Malicious Traffic Analysis: Snort 3 analyzes suspicious packets and known attack signatures to detect malicious traffic within the network. 
+Real-time Alerting: Snort 3 generates real-time alerts when suspicious or malicious activities are detected.
+Machine Learning Techniques in IDS
+Classification of Machine Learning Techniques in IDS
+ML techniques in IDS are classified into three main categories based on how they learn from data:
+Supervised learning
+Description: Requires labeled training data (attack or normal).
+Application: Detect known attack patterns by learning from sample data.
+Popular algorithms:
+K-Nearest Neighbors (KNN): Identify new samples based on distance to neighboring data points.
+Support Vector Machines (SVM): Find the hyperplane that separates the data between classes.
+Decision Tree and Random Forest: Build decision trees to classify data patterns.
+Naïve Bayes: Probabilistic approach to classify behavior based on features.
+Advantages: High accuracy in detecting known attacks.
+Disadvantage: Performance drops with unseen attack types.
+Unsupervised learning
+Description: No labeled data required. Algorithms automatically group data into clusters or detect anomalies.
+Application: Detecting unusual behavior or new attacks (zero-day attacks).
+Popular algorithms:
+K-Means Clustering: Groups data into clusters based on distance.
+Hierarchical Clustering: Build hierarchical trees to group data.
+Autoencoders: Learning compressed representations of data for anomaly detection.
+DBSCAN (Density-Based Spatial Clustering): Clustering based on the density of data points.
+Advantages: Unprecedented effectiveness in attack detection.
+Disadvantages: Difficult to optimize and can detect false positives.
+Semi-supervised learning
+Description: Combines a small amount of labeled data and a large amount of unlabeled data to train a model.
+Application: Useful in cases where there is insufficient labeled data.
+Popular algorithms:
+Label Propagation: Propagate labels from labeled data to unlabeled data.
+Self-Training Models: Models that learn from labeled data and use predictive data to improve themselves.
+Advantages: Combines the advantages of supervised and unsupervised learning.
+Disadvantages: Requires efficient labeling strategy and can be unstable with complex data.
+Data Processing and Optimization Techniques in IDS
+Feature Engineering
+Feature engineering is the process of extracting important information from raw network traffic data to improve the performance of Machine Learning models. Common features used in IDS include:
+Source and destination IP addresses 
+Number of packets sent and received 
+Protocol types such as TCP, UDP, and ICMP 
+Time intervals between packets 
+Flow duration and traffic statistics
+Feature Selection
+Feature selection is used to remove irrelevant or redundant features in order to reduce model complexity and improve detection performance. Selecting important features also helps reduce training time and increase model accuracy.
+Common feature selection techniques include:
+Principal Component Analysis (PCA) 
+Recursive Feature Elimination (RFE) 
+Random Forest Feature Importance
+Handling Imbalanced Data
+DS datasets are often imbalanced because normal traffic appears more frequently than attack traffic. This imbalance can reduce the ability of Machine Learning models to detect minority attack classes.
+Common solutions include:
+Oversampling techniques such as SMOTE (Synthetic Minority Oversampling Technique) 
+Undersampling the dominant class 
+Data balancing methods for improving model performance
+Data Leakage Prevention
+Data leakage prevention is important to ensure reliable model evaluation and avoid unrealistic performance results. In IDS systems, data preprocessing and transformation should only be performed on training data before applying them to testing data.
+Common prevention methods include:
+Separating training and testing datasets properly 
+Avoiding the use of testing information during model training 
+Applying preprocessing techniques after data splitting
+Comparison of Machine Learning Techniques
+Different Machine Learning techniques have different characteristics, advantages, and limitations when applied to Intrusion Detection Systems (IDS). The following table presents a comparison between supervised, unsupervised, and semi-supervised learning techniques in intrusion detection.
+<w:tblPr><w:tblStyle w:val="TableGrid"/><w:tblW w:w="9298" w:type="dxa"/><w:tblLook w:val="04A0" w:firstRow="1" w:lastRow="0" w:firstColumn="1" w:lastColumn="0" w:noHBand="0" w:noVBand="1"/></w:tblPr><w:tblGrid><w:gridCol w:w="1646"/><w:gridCol w:w="1610"/><w:gridCol w:w="1842"/><w:gridCol w:w="2268"/><w:gridCol w:w="1932"/></w:tblGrid><w:tr w:rsidR="00703A4A" w14:paraId="53EA5DF2" w14:textId="77777777" w:rsidTr="00C260E0"><w:tc><w:tcPr><w:tcW w:w="1646" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="1999DAA3" w14:textId="0BBD7D58" w:rsidR="00703A4A" w:rsidRPr="00C260E0" w:rsidRDefault="00703A4A" w:rsidP="00C260E0"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:b/><w:bCs/><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00C260E0"><w:rPr><w:b/><w:bCs/></w:rPr><w:t>Technique
+<w:tcPr><w:tcW w:w="1610" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="3E655A8F" w14:textId="7C8737A7" w:rsidR="00703A4A" w:rsidRPr="00C260E0" w:rsidRDefault="00703A4A" w:rsidP="00C260E0"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:b/><w:bCs/><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00C260E0"><w:rPr><w:b/><w:bCs/></w:rPr><w:t>Training Data
+<w:tcPr><w:tcW w:w="1842" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="514FF465" w14:textId="680909C5" w:rsidR="00703A4A" w:rsidRPr="00C260E0" w:rsidRDefault="00703A4A" w:rsidP="00C260E0"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:b/><w:bCs/><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00C260E0"><w:rPr><w:b/><w:bCs/></w:rPr><w:t>Detection Capability
+<w:tcPr><w:tcW w:w="2268" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="035F955F" w14:textId="0DC4CAF9" w:rsidR="00703A4A" w:rsidRPr="00C260E0" w:rsidRDefault="00703A4A" w:rsidP="00C260E0"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:b/><w:bCs/><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00C260E0"><w:rPr><w:b/><w:bCs/></w:rPr><w:t>Advantages
+<w:tcPr><w:tcW w:w="1932" w:type="dxa"/></w:tcPr><w:tbl><w:tblPr><w:tblW w:w="0" w:type="auto"/><w:tblCellSpacing w:w="15" w:type="dxa"/><w:tblCellMar><w:top w:w="15" w:type="dxa"/><w:left w:w="15" w:type="dxa"/><w:bottom w:w="15" w:type="dxa"/><w:right w:w="15" w:type="dxa"/></w:tblCellMar><w:tblLook w:val="04A0" w:firstRow="1" w:lastRow="0" w:firstColumn="1" w:lastColumn="0" w:noHBand="0" w:noVBand="1"/></w:tblPr><w:tblGrid><w:gridCol w:w="96"/></w:tblGrid><w:tr w:rsidR="00703A4A" w:rsidRPr="00C260E0" w14:paraId="07F8BD90" w14:textId="77777777"><w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="18E79982" w14:textId="77777777" w:rsidR="00703A4A" w:rsidRPr="00C260E0" w:rsidRDefault="00703A4A" w:rsidP="00703A4A"><w:pPr><w:spacing w:before="0"/><w:ind w:firstLine="0"/><w:rPr><w:b/><w:bCs/><w:lang w:val="en-GB"/></w:rPr></w:pPr></w:p></w:tc></w:tr></w:tbl><w:p w14:paraId="6C8CECAA" w14:textId="77777777" w:rsidR="00703A4A" w:rsidRPr="00C260E0" w:rsidRDefault="00703A4A" w:rsidP="00703A4A"><w:pPr><w:ind w:firstLine="0"/><w:rPr><w:b/><w:bCs/><w:vanish/><w:lang w:val="en-GB"/></w:rPr></w:pPr></w:p><w:tbl><w:tblPr><w:tblW w:w="0" w:type="auto"/><w:tblCellSpacing w:w="15" w:type="dxa"/><w:tblCellMar><w:top w:w="15" w:type="dxa"/><w:left w:w="15" w:type="dxa"/><w:bottom w:w="15" w:type="dxa"/><w:right w:w="15" w:type="dxa"/></w:tblCellMar><w:tblLook w:val="04A0" w:firstRow="1" w:lastRow="0" w:firstColumn="1" w:lastColumn="0" w:noHBand="0" w:noVBand="1"/></w:tblPr><w:tblGrid><w:gridCol w:w="1694"/></w:tblGrid><w:tr w:rsidR="00703A4A" w:rsidRPr="00C260E0" w14:paraId="05D7FD91" w14:textId="77777777" w:rsidTr="00703A4A"><w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="184" w:type="dxa"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="75602E2A" w14:textId="77777777" w:rsidR="00703A4A" w:rsidRPr="00C260E0" w:rsidRDefault="00703A4A" w:rsidP="00C260E0"><w:pPr><w:spacing w:before="0"/><w:ind w:firstLine="0"/><w:jc w:val="left"/><w:rPr><w:b/><w:bCs/><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00C260E0"><w:rPr><w:b/><w:bCs/></w:rPr><w:t>Disadvantages
+<w:tc><w:tcPr><w:tcW w:w="1646" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="6122F00B" w14:textId="38A32E69" w:rsidR="00703A4A" w:rsidRDefault="00703A4A" w:rsidP="00C260E0"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="left"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00703A4A"><w:t>Supervised Learning
+<w:tcPr><w:tcW w:w="1610" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="145FBBC0" w14:textId="5911C451" w:rsidR="00703A4A" w:rsidRDefault="00703A4A" w:rsidP="00C260E0"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="left"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00703A4A"><w:t>Requires labeled data
+<w:tcPr><w:tcW w:w="1842" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="37B281DA" w14:textId="5A14291A" w:rsidR="00703A4A" w:rsidRDefault="00703A4A" w:rsidP="00C260E0"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="left"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00703A4A"><w:t>Detects known attacks effectively
+<w:tcPr><w:tcW w:w="2268" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="562C5E83" w14:textId="4B815581" w:rsidR="00703A4A" w:rsidRDefault="00703A4A" w:rsidP="00C260E0"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="left"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00703A4A"><w:t>High detection accuracy, fast classification performance
+<w:tcPr><w:tcW w:w="1932" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="7F32AB04" w14:textId="61F929F3" w:rsidR="00703A4A" w:rsidRDefault="00703A4A" w:rsidP="00C260E0"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="left"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00703A4A"><w:t>Requires large labeled datasets, difficult to detect unknown attacks
+<w:tc><w:tcPr><w:tcW w:w="1646" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="500A7465" w14:textId="1B66607E" w:rsidR="00703A4A" w:rsidRDefault="00703A4A" w:rsidP="00C260E0"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="left"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00703A4A"><w:t>Unsupervised Learning
+<w:tcPr><w:tcW w:w="1610" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="3C202C72" w14:textId="21FE2FBB" w:rsidR="00703A4A" w:rsidRDefault="00703A4A" w:rsidP="00C260E0"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="left"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00703A4A"><w:t>Uses unlabeled data
+<w:tcPr><w:tcW w:w="1842" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="3955DE84" w14:textId="75830050" w:rsidR="00703A4A" w:rsidRDefault="00703A4A" w:rsidP="00C260E0"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="left"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00703A4A"><w:t>Detects unknown or abnormal behaviors
+<w:tcPr><w:tcW w:w="2268" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="2E464446" w14:textId="570653AA" w:rsidR="00703A4A" w:rsidRDefault="00703A4A" w:rsidP="00C260E0"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="left"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00703A4A"><w:t>Capable of detecting new attacks, no labeled data required
+<w:tcPr><w:tcW w:w="1932" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="58B5EE7F" w14:textId="78139EC8" w:rsidR="00703A4A" w:rsidRDefault="00703A4A" w:rsidP="00C260E0"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="left"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00703A4A"><w:t>Higher false positive rate, lower accuracy
+<w:tc><w:tcPr><w:tcW w:w="1646" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="3AF18109" w14:textId="1F4B164D" w:rsidR="00703A4A" w:rsidRDefault="00703A4A" w:rsidP="00C260E0"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="left"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00703A4A"><w:t>Semi-supervised Learning
+<w:tcPr><w:tcW w:w="1610" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="5DF00E16" w14:textId="2F1A234E" w:rsidR="00703A4A" w:rsidRDefault="00703A4A" w:rsidP="00C260E0"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="left"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00703A4A"><w:t>Uses partially labeled data
+<w:tcPr><w:tcW w:w="1842" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="5D593756" w14:textId="0FAB2D2F" w:rsidR="00703A4A" w:rsidRDefault="00703A4A" w:rsidP="00C260E0"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="left"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00703A4A"><w:t>Detects both normal and abnormal behaviors
+<w:tcPr><w:tcW w:w="2268" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="42ACB3CF" w14:textId="79297DC3" w:rsidR="00703A4A" w:rsidRDefault="00703A4A" w:rsidP="00C260E0"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="left"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00703A4A"><w:t>Suitable
+ 
+for anomaly detection, reduces labeling effort
+<w:tcPr><w:tcW w:w="1932" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="767AF6AB" w14:textId="74298B80" w:rsidR="00703A4A" w:rsidRDefault="00703A4A" w:rsidP="00C260E0"><w:pPr><w:ind w:firstLine="0"/><w:jc w:val="left"/><w:rPr><w:lang w:val="en-GB"/></w:rPr></w:pPr><w:r w:rsidRPr="00703A4A"><w:t>Complex training process, higher computational cost
+Introduction to Docker Compose
+Definition of Docker Compose
+Docker Compose is a tool used for managing and running multi-container Docker applications. It allows developers to define and configure multiple services in a single YAML file, making deployment and container management more efficient.
+Using Docker Compose, different components of a system such as web applications, databases, monitoring tools, and IDS services can be started and managed together with a single command. This simplifies system deployment, improves service organization, and supports consistent development environments.
+Docker Compose Architecture
+Docker Compose architecture is designed to manage multiple containers and services within a single environment. Each service is defined in a YAML configuration file, allowing containers to communicate and operate together through Docker networks.
+A Docker Compose architecture commonly includes different types of services 
+:
+Application Services: Web applications or APIs such as Flask applications. 
+Security Services: Network monitoring and intrusion detection tools such as Snort 3. 
+Logging and Monitoring Services: Log management and visualization systems such as the ELK Stack. 
+Database Services: Data storage systems such as Redis or MySQL. 
+This architecture simplifies multi-container deployment, improves service management, and supports scalability and portability in modern system environments.
+Advantages of Docker Compose
+Docker Compose provides several advantages for managing multi-container applications and modern system environments.
+Easy Deployment: Docker Compose allows multiple services to be deployed and managed using a single YAML configuration file and simple commands. 
+Scalability: Services can be scaled easily by increasing the number of containers when system workload grows. 
+Portability: Applications and services can run consistently across different environments without changing system configurations. 
+Service Isolation: Each service runs in an independent container, improving system organization, security, and dependency management.
+Application of Docker Compose in the Project
+Docker Compose is widely used to manage and deploy multi-container applications in modern system environments. It allows different services to operate together efficiently within a unified architecture.
+Common applications of Docker Compose include:
+Application Containers: Running web applications, APIs, or backend services in separate containers. 
+Security Containers: Deploying security tools such as intrusion detection and monitoring systems. 
+Logging and Monitoring Containers: Managing log analysis and visualization services such as the ELK Stack. 
+Network Communication: Supporting communication and data exchange between containers through Docker networks. 
+Docker Compose simplifies system deployment, improves service management, and supports flexible and scalable containerized environments.
+CHƯƠNG 2. PHÂN TÍCH VÀ THIẾT KẾ HỆ THỐNG
+2.1 Phân tích yêu cầu
+2.1.1 Yêu cầu của người dùng
+Với vai trò là người dùng, ứng dụng di động GTech cần đáp ứng các yêu cầu cơ bản sau:
+Tìm kiếm sản phẩm: Cho phép người dùng dễ dàng tìm kiếm và lọc sản phẩm theo các tiêu chí như danh mục, giá cả, thương hiệu, và từ khóa. Việc tìm kiếm cần nhanh chóng và chính xác để mang lại trải nghiệm mượt mà cho người dùng.
+Giao dịch trực tuyến: Đảm bảo quá trình mua sắm từ việc thêm sản phẩm vào giỏ hàng đến thanh toán được thực hiện dễ dàng và an toàn. Người dùng cũng có thể theo dõi trạng thái đơn hàng để biết được thời gian giao hàng dự kiến.
+Cá nhân hóa trải nghiệm: Cung cấp các gợi ý sản phẩm dựa trên sở thích và lịch sử mua sắm của người dùng. Người dùng cũng có thể lưu các sản phẩm vào danh sách yêu thích và quản lý thông tin cá nhân, địa chỉ giao hàng một cách thuận tiện.
+Hỗ trợ khách hàng: Ứng dụng cần cung cấp thông tin liên hệ rõ ràng, kèm theo chức năng hỗ trợ khách hàng qua chat trực tiếp, trả lời các câu hỏi thường gặp (FAQ) và giải quyết các vấn đề liên quan đến giao dịch hoặc sản phẩm.
+2.1.2 Yêu cầu chức năng
+Phân tích từ nhu cầu của người dùng, ứng dụng di động G Tech cần có các chức năng chính như:
+Quản lý sản phẩm: Hiển thị danh sách sản phẩm một cách rõ ràng và chi tiết, bao gồm các thông tin như tên sản phẩm, giá cả, hình ảnh minh họa, mô tả chi tiết và trạng thái hàng tồn kho (còn hàng hoặc hết hàng). Người dùng có thể dễ dàng tìm kiếm và lọc sản phẩm theo nhiều tiêu chí.
+Quản lý người dùng: Hỗ trợ người dùng đăng ký tài khoản mới hoặc đăng nhập vào tài khoản hiện có. Người dùng có thể cập nhật thông tin cá nhân, thay đổi mật khẩu, quản lý địa chỉ giao hàng và xem lịch sử mua sắm của mình.
+Xử lý giao dịch: Cung cấp tính năng giỏ hàng để người dùng có thể thêm, sửa hoặc xóa sản phẩm dễ dàng. Ứng dụng hỗ trợ các phương thức thanh toán đa dạng như thẻ tín dụng, ví điện tử và hỗ trợ mã giảm giá. Sau khi thanh toán, người dùng nhận được xác nhận đơn hàng qua email hoặc thông báo trong ứng dụng.
+Hỗ trợ trực tuyến: Tích hợp hệ thống trò chuyện trực tiếp (live chat) để giải đáp thắc mắc của người dùng theo thời gian thực. Cung cấp thư viện câu hỏi thường gặp (FAQ) và cho phép người dùng gửi phản hồi hoặc khiếu nại trực tiếp qua ứng dụng.
+2.1.3 Yêu cầu phi chức năng
+Hiệu suất: Ứng dụng cần hoạt động mượt mà, thời gian tải nhanh và có thể xử lý một lượng lớn người dùng đồng thời mà không gặp phải tình trạng giật lag hay giảm hiệu suất.
+Độ tin cậy: Ứng dụng phải ổn định, ít gặp lỗi và có khả năng phục hồi dữ liệu khi có sự cố. Các thông tin cá nhân của người dùng và giao dịch phải được bảo vệ an toàn, đảm bảo tính bảo mật cao.
+Khả năng sử dụng: Giao diện người dùng cần được thiết kế trực quan, dễ sử dụng và thân thiện. Ứng dụng phải hỗ trợ đa ngôn ngữ để phục vụ người dùng ở nhiều khu vực khác nhau, và phải tương thích tốt trên các thiết bị di động với các kích thước màn hình khác nhau.
+Khả năng mở rộng: Ứng dụng cần có khả năng tích hợp với các cổng thanh toán mới, bổ sung tính năng mới hoặc mở rộng danh mục sản phẩm khi có yêu cầu, nhằm phục vụ nhu cầu phát triển trong tương lai.
+2.2. Phân tích hệ thống
+<w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:spacing w:before="160" w:after="160"/><w:ind w:firstLine="0"/><w:rPr><w:i/><w:color w:val="404040"/><w:szCs w:val="26"/></w:rPr></w:pPr><w:bookmarkStart w:id="13" w:name="_heading=h.yxb39okqfgo7" w:colFirst="0" w:colLast="0"/><w:bookmarkEnd w:id="13"/><w:r><w:br w:type="page"/></w:r></w:p><w:bookmarkStart w:id="14" w:name="_heading=h.510z8nob5p18" w:colFirst="0" w:colLast="0"/><w:bookmarkEnd w:id="14"/><w:p w14:paraId="1D64F2DA" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:pStyle w:val="Heading1"/><w:rPr><w:b w:val="0"/><w:color w:val="000000"/></w:rPr></w:pPr><w:sdt><w:sdtPr><w:tag w:val="goog_rdk_0"/><w:id w:val="-761225318"/></w:sdtPr><w:sdtContent><w:r><w:rPr><w:rFonts w:ascii="Arial" w:eastAsia="Arial" w:hAnsi="Arial" w:cs="Arial"/><w:color w:val="000000"/></w:rPr><w:t>KẾT LUẬN
+I. Kết quả đạt được
+<w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:ind w:left="0" w:firstLine="284"/><w:rPr><w:color w:val="000000"/><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:color w:val="000000"/><w:szCs w:val="26"/></w:rPr><w:t>Ứng dụng mua sắm thiết bị điện tử trên Android tích hợp đầy đủ các chức năng cơ bản: tìm kiếm sản phẩm, quản lý giỏ hàng, đặt hàng và thanh toán.
+<w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:spacing w:before="0"/><w:ind w:left="0" w:firstLine="284"/><w:rPr><w:color w:val="000000"/><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:color w:val="000000"/><w:szCs w:val="26"/></w:rPr><w:t>Giao diện hiện đại, thân thiện, được xây dựng với Jetpack Compose, giúp người dùng dễ dàng thao tác và trải nghiệm mượt mà trên thiết bị di động.
+<w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:spacing w:before="0"/><w:ind w:left="0" w:firstLine="284"/><w:rPr><w:b/><w:color w:val="000000"/><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:color w:val="000000"/><w:szCs w:val="26"/></w:rPr><w:t>Tích hợp chatbot hỗ trợ, giúp người dùng giải đáp thắc mắc và hỗ trợ trong quá trình đặt hàng.
+<w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:spacing w:before="0"/><w:ind w:left="0" w:firstLine="284"/><w:rPr><w:b/><w:color w:val="000000"/><w:szCs w:val="26"/></w:rPr></w:pPr></w:p><w:p w14:paraId="291EF515" w14:textId="77777777" w:rsidR="00A815CE" w:rsidRDefault="00000000"><w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr><w:pBdr><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:spacing w:before="0"/><w:ind w:left="0" w:firstLine="284"/><w:rPr><w:b/><w:color w:val="000000"/><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:color w:val="000000"/><w:szCs w:val="26"/></w:rPr><w:t>Đảm bảo an toàn thông tin, sử dụng Firebase Authentication để xác thực người dùng, mã hóa dữ liệu người dùng khi lưu trữ.
+II. Chức năng chưa hoàn thiện
+<w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:ind w:left="0" w:firstLine="284"/><w:rPr><w:color w:val="000000"/><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:color w:val="000000"/><w:szCs w:val="26"/></w:rPr><w:t>Giao diện cần nâng cấp và tối ưu hơn.
+<w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:spacing w:before="0"/><w:rPr><w:color w:val="000000"/><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:color w:val="000000"/><w:szCs w:val="26"/></w:rPr><w:t>Hiệu năng còn hạn chế khi có nhiều người dùng đồng thời, cần tối ưu dữ liệu và xử lý bất đồng bộ.
+<w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:spacing w:before="0"/><w:ind w:left="0" w:firstLine="284"/><w:rPr><w:color w:val="000000"/><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:color w:val="000000"/><w:szCs w:val="26"/></w:rPr><w:t>Bán hàng tuyến tính, chỉ có người quản trị mới có thể đăng bán, cần tích hợp các tính năng nâng cao như mua bán giữa người dùng(marketplace).
+<w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:spacing w:before="0"/><w:ind w:left="0" w:firstLine="284"/><w:rPr><w:color w:val="000000"/><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:color w:val="000000"/><w:szCs w:val="26"/></w:rPr><w:t xml:space="preserve">Cần thêm tính năng trò chuyện giúp tăng khả năng tương tác giữa người mua và người bán. 
+<w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:spacing w:before="0"/><w:ind w:left="0" w:firstLine="284"/><w:rPr><w:color w:val="000000"/><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:color w:val="000000"/><w:szCs w:val="26"/></w:rPr><w:t>Chỉ hỗ trợ một ngôn ngữ và một đơn vị tiền tệ, gây khó tiếp cận.
+ III. Hướng phát triển
+1.Mở rộng nền tảng:
+<w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:ind w:left="0" w:firstLine="284"/><w:rPr><w:color w:val="000000"/><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:color w:val="000000"/><w:szCs w:val="26"/></w:rPr><w:t>Đa dạng hóa kênh bán hàng: Tích hợp thêm ứng dụng di động (app) để đáp ứng nhu cầu mua sắm ngày càng tăng trên thiết bị di động.
+<w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:between w:val="nil"/></w:pBdr><w:spacing w:before="0"/><w:ind w:left="0" w:firstLine="284"/><w:rPr><w:color w:val="000000"/><w:szCs w:val="26"/></w:rPr></w:pPr><w:r><w:rPr><w:color w:val="000000"/><w:szCs w:val="26"/></w:rPr><w:t xml:space="preserve">Phát triển mô hình marketplace: Cho phép các nhà bán lẻ khác cùng tham gia vào nền tảng, tạo ra một chợ trực tuyến đa dạng sản phẩm. 
+2. Tăng cường bảo mật:
+-
+<w:t>Xác thực đa yếu tố: Áp dụng xác thực đa yếu tố (ví dụ: mật khẩu, mã OTP, xác thực sinh trắc học) để bảo vệ tài khoản người dùng tốt hơn.
+-
+<w:t>Quét và vá lỗ hổng bảo mật thường xuyên: Thực hiện kiểm tra bảo mật định kỳ để phát hiện và khắc phục kịp thời các lỗ hổng tiềm ẩn.
+-
+<w:t>Mã hóa dữ liệu nhạy cảm: Áp dụng các kỹ thuật mã hóa mạnh mẽ cho thông tin người dùng và dữ liệu thanh toán.
+3. Phát triển tính năng mới:
+-
+<w:t>Tìm kiếm nâng cao: Cải thiện tính năng tìm kiếm bằng cách sử dụng thuật toán gợi ý sản phẩm, tìm kiếm theo hình ảnh, hoặc tìm kiếm bằng giọng nói.
+-
+<w:t>So sánh sản phẩm: Cho phép người dùng dễ dàng so sánh các sản phẩm khác nhau dựa trên các thông số kỹ thuật và giá cả.
+-
+<w:t>Tính năng gợi ý sản phẩm: Dựa trên lịch sử mua hàng và hành vi sử dụng của khách hàng, hệ thống sẽ tự động gợi ý những sản phẩm phù hợp.
+-
+<w:t>Chương trình khuyến mãi và tích điểm: Thường xuyên tổ chức các chương trình khuyến mãi hấp dẫn và xây dựng chương trình tích điểm để thu hút khách hàng.
+-
+<w:t>Tối ưu hóa ứng dụng cho nhiều ngôn ngữ và loại tiền tệ để tiếp cận khách hàng quốc tế.
+4. Các tính năng khác:
+-
+<w:t>Trò chuyện trực tuyến: Tích hợp tính năng chat trực tuyến với nhân viên bán hàng để hỗ trợ khách hàng nhanh chóng và hiệu quả.
+-
+<w:t>Trả góp: Liên kết với các ngân hàng để cung cấp dịch vụ trả góp cho khách hàng.
+-
+<w:t>Bảo hành, đổi trả: Xây dựng quy trình bảo hành, đổi trả rõ ràng và minh bạch.
+DANH MỤC TÀI LIỆU THAM KHẢO
+1. 
+Jetpack Compose Documentation (NhatVM).
+2. Firebase Documentation (
+firebase.google.com/docs
+).
+3. Kotlin Documentation (https://developer.android.com/kotlin).

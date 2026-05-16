@@ -1,4 +1,188 @@
 /* ── App Logic: IDS Dashboard ───────────────────────────────────────────── */
+/* ── Snort3 Integration ──────────────────────────────────────────────────── */
+
+// Colour map for Snort3 alert types
+const SNORT_TYPE_COLORS = {
+  "DDoS":       { bg: "rgba(255,71,87,0.15)", text: "#ff6584", border: "rgba(255,71,87,0.3)" },
+  "DoS":        { bg: "rgba(255,165,0,0.15)", text: "#ffa500", border: "rgba(255,165,0,0.3)" },
+  "PortScan":   { bg: "rgba(255,209,102,0.15)", text: "#ffd166", border: "rgba(255,209,102,0.3)" },
+  "BruteForce": { bg: "rgba(255,99,132,0.15)", text: "#ff6384", border: "rgba(255,99,132,0.3)" },
+  "Bot":        { bg: "rgba(153,102,255,0.15)", text: "#9966ff", border: "rgba(153,102,255,0.3)" },
+  "WebAttack":  { bg: "rgba(255,159,64,0.15)", text: "#ff9f40", border: "rgba(255,159,64,0.3)" },
+  "Unknown":    { bg: "rgba(255,255,255,0.06)", text: "#888", border: "rgba(255,255,255,0.1)" },
+};
+
+let currentSnortFilter = "ALL";
+let snortAlertCount = 0;
+
+async function refreshSnortStatus() {
+  try {
+    const res = await fetch('/api/snort/status');
+    const data = await res.json();
+    const dot = document.getElementById('snortDot');
+    const statusText = document.getElementById('snortStatusText');
+
+    if (data.running) {
+      dot.className = 'dot on';
+      statusText.textContent = `Snort3: Running | Alerts: ${data.alert_count}`;
+    } else if (data.simulation) {
+      dot.className = 'dot sim';
+      statusText.textContent = `Snort3: Simulation | Alerts: ${data.alert_count}`;
+    } else {
+      dot.className = 'dot off';
+      statusText.textContent = `Snort3: Not running | Alerts: ${data.alert_count}`;
+    }
+    return data;
+  } catch (e) {
+    console.warn('Snort3 status check failed:', e);
+    return { running: false, simulation: false, alert_count: 0 };
+  }
+}
+
+async function loadSnortAlerts() {
+  try {
+    const type = currentSnortFilter;
+    const res = await fetch(`/api/snort/alerts?type=${type}&limit=100`);
+    const alerts = await res.json();
+    renderSnortAlerts(alerts);
+    updateSnortStats(alerts);
+  } catch (e) {
+    console.error('Failed to load Snort alerts:', e);
+  }
+}
+
+function renderSnortAlerts(alerts) {
+  const container = document.getElementById('snortAlertList');
+  if (!alerts || alerts.length === 0) {
+    container.innerHTML = '<div style="text-align:center; padding: 30px; color: #666;">' +
+      (currentSnortFilter === 'ALL' ? 'No Snort3 alerts received yet.' : `No ${currentSnortFilter} alerts.`) +
+      '</div>';
+    return;
+  }
+  snortAlertCount = alerts.length;
+  container.innerHTML = alerts.map(a => {
+    const colors = SNORT_TYPE_COLORS[a.type] || SNORT_TYPE_COLORS['Unknown'];
+    const time = a.timestamp ? formatSnortTime(a.timestamp) : '--';
+    const srcStr = a.src_ip ? `${a.src_ip}:${a.src_port || ''}` : '--';
+    return `
+      <div class="snort3-alert-row">
+        <span class="alert-type-badge type-${a.type}" style="background:${colors.bg};color:${colors.text};border-color:${colors.border}">${a.type || 'UNK'}</span>
+        <span class="snort-alert-msg">${a.msg || a.type + ' detected'}</span>
+        <span class="snort-alert-ip">${srcStr}</span>
+        <span class="snort-alert-src">${a.source === 'snort3_sim' ? 'SIM' : 'SNORT3'}</span>
+        <span class="snort-alert-time">${time}</span>
+      </div>`;
+  }).join('');
+}
+
+function formatSnortTime(ts) {
+  try {
+    const d = new Date(ts);
+    return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  } catch (e) {
+    return ts;
+  }
+}
+
+function updateSnortStats(alerts) {
+  const counts = { total: alerts.length };
+  const types = ['DDoS', 'DoS', 'PortScan', 'BruteForce', 'Bot', 'WebAttack'];
+  types.forEach(t => { counts[t] = 0; });
+  alerts.forEach(a => { if (counts[a.type] !== undefined) counts[a.type]++; });
+
+  document.getElementById('snortTotalAlerts').textContent = counts.total;
+  types.forEach(t => {
+    const el = document.getElementById('snort' + t);
+    if (el) el.textContent = counts[t];
+  });
+}
+
+function filterSnortAlerts(type, btn) {
+  currentSnortFilter = type;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  loadSnortAlerts();
+}
+
+async function startSnortSimulation() {
+  try {
+    const res = await fetch('/api/snort/simulate', { method: 'POST' });
+    const data = await res.json();
+    if (data.success) {
+      showNotice('Snort3 simulation started');
+      refreshSnortStatus();
+    } else {
+      showAlert('Failed: ' + data.message);
+    }
+  } catch (e) {
+    showAlert('Error: ' + e.message);
+  }
+}
+
+async function stopSnortSimulation() {
+  try {
+    const res = await fetch('/api/snort/simulate/stop', { method: 'POST' });
+    const data = await res.json();
+    if (data.success) {
+      showNotice('Snort3 simulation stopped');
+      refreshSnortStatus();
+    }
+  } catch (e) {
+    showAlert('Error: ' + e.message);
+  }
+}
+
+// ── Remote Sensors ──────────────────────────────────────────────────────────
+async function loadSensors() {
+  try {
+    const res = await fetch('/api/snort/sensors');
+    const sensors = await res.json();
+    const grid = document.getElementById('sensorGrid');
+    if (!sensors || sensors.length === 0) {
+      grid.innerHTML = '<div style="text-align:center; padding: 10px; color: #666;">No remote sensors connected</div>';
+      return;
+    }
+    grid.innerHTML = sensors.map(s => {
+      const alive = s.alive ? 'alive' : 'dead';
+      const time = s.last_alert ? formatSnortTime(s.last_alert) : '--';
+      const sourceType = s.source || s.type || 'unknown';
+      const typeColor = sourceType === 'live_agent' ? '#00C9A7' : sourceType === 'snort3_remote' ? '#6C63FF' : '#FFD166';
+      return `
+        <div class="sensor-card">
+          <div class="sensor-name">${s.name || s.sensor_id}</div>
+          <div class="sensor-host">${s.hostname || 'unknown'} · ${s.sensor_id}</div>
+          <div class="sensor-time">Last: ${time}</div>
+          <div style="display:flex; gap:0.5rem; align-items:center; margin-top:0.2rem;">
+            <span class="sensor-status ${alive}" style="font-size:0.6rem;">${alive.toUpperCase()}</span>
+            <span style="font-size:0.6rem; color:${typeColor};">${sourceType}</span>
+          </div>
+        </div>`;
+    }).join('');
+  } catch (e) {
+    console.warn('Sensor load failed:', e);
+  }
+}
+
+function showNotice(msg) {
+  const banner = document.getElementById('alertBanner');
+  banner.innerHTML = 'ℹ️ ' + msg;
+  banner.style.display = 'block';
+  banner.style.background = 'rgba(46,213,115,0.12)';
+  banner.style.borderColor = 'rgba(46,213,115,0.35)';
+  banner.style.color = '#2ed573';
+  setTimeout(() => { banner.style.display = 'none'; }, 5000);
+}
+
+// Override showAlert to handle multiple styles
+const _origShowAlert = window.showAlert;
+window.showAlert = function(msg) {
+  const banner = document.getElementById('alertBanner');
+  banner.innerHTML = msg;
+  banner.style.display = 'block';
+  banner.style.background = '';  // reset to CSS default
+  banner.style.borderColor = '';
+  banner.style.color = '';
+};
 
 const MODEL_COLORS = {
   "KNN"          : "#6C63FF",
@@ -27,6 +211,12 @@ document.addEventListener('DOMContentLoaded', () => {
   renderFeatureFields();
   loadStatus();
   loadResults();
+  refreshSnortStatus();
+  loadSnortAlerts();
+  loadSensors();
+  setInterval(loadSnortAlerts, 5000);
+  setInterval(refreshSnortStatus, 10000);
+  setInterval(loadSensors, 15000);
 });
 
 // ── API: Status ───────────────────────────────────────────────────────────────

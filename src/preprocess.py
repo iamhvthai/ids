@@ -379,17 +379,36 @@ def preprocess():
     # == 14. Feature Selection: RF + MI (TRAIN only, balanced, normalized) ==
     step_start = time.time()
     print(f"\n[14/17] Feature Selection (RF + MI, balanced, normalized, TRAIN only)...")
-    rf_sel = RandomForestClassifier(n_estimators=100, max_depth=15, n_jobs=-1, 
+    
+    # ---------------------------------------------------------
+    # GIẢI PHÁP TỐI ƯU TỐC ĐỘ: Lấy mẫu đại diện (Subsampling)
+    # ---------------------------------------------------------
+    FS_SAMPLE_SIZE = 300000 # Chỉ lấy 100k dòng để tìm Feature
+    
+    if len(X_train) > FS_SAMPLE_SIZE:
+        print(f"       Subsampling {len(X_train):,} -> {FS_SAMPLE_SIZE:,} rows for faster feature selection...")
+        _, X_fs, _, y_fs = train_test_split(
+            X_train, y_train, 
+            test_size=FS_SAMPLE_SIZE, 
+            stratify=y_train, 
+            random_state=RANDOM_STATE
+        )
+    else:
+        X_fs, y_fs = X_train, y_train
+
+    # Tối ưu: Giảm số cây RF xuống 50 (vì chỉ dùng để rank feature)
+    rf_sel = RandomForestClassifier(n_estimators=80, max_depth=15, n_jobs=-1, 
                                     random_state=RANDOM_STATE, class_weight='balanced')
-    rf_sel.fit(X_train, y_train)
+    rf_sel.fit(X_fs, y_fs) # CHẠY TRÊN TẬP SAMPLE
     rf_imp = rf_sel.feature_importances_
     
-    # Scale X_train for MI using MinMaxScaler (better for MI than StandardScaler)
+    # Scale tập Sample cho MI
     scaler_mi = MinMaxScaler()
-    X_train_scaled_mi = scaler_mi.fit_transform(X_train)
-    print("Start MI...")
-    mi_imp = mutual_info_classif(X_train_scaled_mi, y_train, random_state=RANDOM_STATE)
-    print("Done MI")
+    X_fs_scaled = scaler_mi.fit_transform(X_fs)
+    
+    print("       Start MI (on subsample)...")
+    mi_imp = mutual_info_classif(X_fs_scaled, y_fs, random_state=RANDOM_STATE) # CHẠY TRÊN TẬP SAMPLE
+    print("       Done MI")
     # Normalize both to [0, 1]
     rf_imp_norm = rf_imp / (rf_imp.sum() + 1e-10)
     mi_imp_norm = mi_imp / (mi_imp.sum() + 1e-10)
@@ -404,7 +423,7 @@ def preprocess():
 
     for idx in range(len(feature_cols)):
         feat_name = feature_cols[idx]
-        corr = np.abs(np.corrcoef(X_train[:, idx], y_train)[0, 1])
+        corr = np.abs(np.corrcoef(X_fs[:, idx], y_fs)[0, 1])
         mi_score = mi_imp[idx]
 
         # Name-based leakage check (highest priority)
@@ -483,10 +502,26 @@ def preprocess():
 
     pt = None  # FIX: khởi tạo trước để tránh NameError khi save
     if continuous_idx:
+        # Clip extreme outliers to prevent numeric overflow in PowerTransformer (Yeo-Johnson)
+        # mà không làm thay đổi phân phối chung của dữ liệu
+        p99 = np.percentile(X_train[:, continuous_idx], 99.9, axis=0)
+        X_train_cont_clipped = np.clip(X_train[:, continuous_idx], a_min=None, a_max=p99)
+        X_val_cont_clipped = np.clip(X_val[:, continuous_idx], a_min=None, a_max=p99)
+        X_test_cont_clipped = np.clip(X_test[:, continuous_idx], a_min=None, a_max=p99)
+
+        # CỰC KỲ QUAN TRỌNG: Scale dữ liệu về [-1, 1] trước Yeo-Johnson
+        # Yeo-Johnson tính (x+1)^lambda. Nếu x nằm trong [-1, 1] thì (x+1) nằm trong [0, 2]
+        # Điều này giúp loại bỏ 100% khả năng tràn số (overflow) mà vẫn GIỮ NGUYÊN
+        # độ chính xác và phân phối chuẩn hoá của PowerTransformer.
+        pre_pt_scaler = MinMaxScaler(feature_range=(-1, 1))
+        X_train_cont_scaled = pre_pt_scaler.fit_transform(X_train_cont_clipped)
+        X_val_cont_scaled = pre_pt_scaler.transform(X_val_cont_clipped)
+        X_test_cont_scaled = pre_pt_scaler.transform(X_test_cont_clipped)
+
         pt = PowerTransformer(method='yeo-johnson')
-        X_train_continuous = pt.fit_transform(X_train[:, continuous_idx])
-        X_val_continuous = pt.transform(X_val[:, continuous_idx])
-        X_test_continuous = pt.transform(X_test[:, continuous_idx])
+        X_train_continuous = pt.fit_transform(X_train_cont_scaled)
+        X_val_continuous = pt.transform(X_val_cont_scaled)
+        X_test_continuous = pt.transform(X_test_cont_scaled)
         
         # Reconstruct with binary + transformed continuous
         X_train_new = np.zeros_like(X_train)

@@ -419,6 +419,183 @@ body {
 @keyframes shimmer  { 0%{ background-position:200% 0 } 100%{ background-position:-200% 0 } }
 @keyframes fadeIn   { from{ opacity:0; transform:translateY(8px) } to{ opacity:1; transform:translateY(0) } }
 
+/* ── Snort3 Section ────────────────────────────────────────────────────────── */
+.snort3-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.snort3-controls {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.snort3-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+.snort3-status .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.snort3-status .dot.on { background: var(--success); }
+.snort3-status .dot.off { background: #666; }
+.snort3-status .dot.sim { background: var(--yellow); }
+.snort3-status .dot.error { background: var(--danger); }
+
+.snort3-filter-bar {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.filter-btn {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font-main);
+}
+.filter-btn:hover { border-color: var(--purple); color: var(--text-primary); }
+.filter-btn.active {
+  background: rgba(108,99,255,0.15);
+  border-color: var(--purple);
+  color: var(--purple);
+}
+.filter-btn.filter-ddos.active { background: rgba(255,71,87,0.15); border-color: var(--danger); color: var(--danger); }
+.filter-btn.filter-dos.active { background: rgba(255,165,0,0.15); border-color: #ffa500; color: #ffa500; }
+.filter-btn.filter-portscan.active { background: rgba(255,209,102,0.15); border-color: var(--yellow); color: var(--yellow); }
+.filter-btn.filter-bruteforce.active { background: rgba(255,99,132,0.15); border-color: #ff6384; color: #ff6384; }
+.filter-btn.filter-bot.active { background: rgba(153,102,255,0.15); border-color: #9966ff; color: #9966ff; }
+.filter-btn.filter-webattack.active { background: rgba(255,159,64,0.15); border-color: #ff9f40; color: #ff9f40; }
+
+.snort3-alert-list {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.snort3-alert-list::-webkit-scrollbar { width: 6px; }
+.snort3-alert-list::-webkit-scrollbar-track { background: transparent; }
+.snort3-alert-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+.snort3-alert-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.82rem;
+  transition: var(--transition);
+  animation: fadeIn 0.3s ease;
+}
+.snort3-alert-row:hover { background: rgba(255,255,255,0.03); }
+.snort3-alert-row:last-child { border-bottom: none; }
+
+.alert-type-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  min-width: 70px;
+  text-align: center;
+}
+.alert-type-badge.type-DDoS { background: rgba(255,71,87,0.15); color: #ff6584; border: 1px solid rgba(255,71,87,0.3); }
+.alert-type-badge.type-DoS { background: rgba(255,165,0,0.15); color: #ffa500; border: 1px solid rgba(255,165,0,0.3); }
+.alert-type-badge.type-PortScan { background: rgba(255,209,102,0.15); color: var(--yellow); border: 1px solid rgba(255,209,102,0.3); }
+.alert-type-badge.type-BruteForce { background: rgba(255,99,132,0.15); color: #ff6384; border: 1px solid rgba(255,99,132,0.3); }
+.alert-type-badge.type-Bot { background: rgba(153,102,255,0.15); color: #9966ff; border: 1px solid rgba(153,102,255,0.3); }
+.alert-type-badge.type-WebAttack { background: rgba(255,159,64,0.15); color: #ff9f40; border: 1px solid rgba(255,159,64,0.3); }
+.alert-type-badge.type-Unknown { background: rgba(255,255,255,0.06); color: var(--text-muted); }
+
+.snort-alert-msg { flex: 1; color: var(--text-primary); font-weight: 500; }
+.snort-alert-ip { color: var(--text-muted); font-family: var(--font-mono); font-size: 0.75rem; }
+.snort-alert-time { color: var(--text-muted); font-size: 0.7rem; white-space: nowrap; }
+.snort-alert-src {
+  font-size: 0.6rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.snort3-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.snort3-stat {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.8rem;
+  text-align: center;
+}
+.snort3-stat .stat-number {
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.snort3-stat .stat-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+/* ── Sensor Grid ──────────────────────────────────────────────────────────── */
+.sensor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.sensor-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  transition: var(--transition);
+}
+.sensor-card:hover { border-color: var(--border-glow); }
+.sensor-card .sensor-name { font-weight: 600; font-size: 0.85rem; }
+.sensor-card .sensor-host { font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-mono); }
+.sensor-card .sensor-time { font-size: 0.7rem; color: var(--text-muted); }
+.sensor-card .sensor-status {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: inline-block;
+  width: fit-content;
+  padding: 0.1rem 0.5rem;
+  border-radius: 10px;
+}
+.sensor-card .sensor-status.alive { background: rgba(46,213,115,0.12); color: var(--success); }
+.sensor-card .sensor-status.dead  { background: rgba(255,71,87,0.12); color: var(--danger); }
+
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .container { padding: 1rem; }

@@ -1,0 +1,48 @@
+CHAPTER 2. SYSTEM ANALYSIS AND DESIGN
+
+2.1 Requirement Analysis
+The development of a modern Intrusion Detection System (IDS) necessitates a thorough understanding of the current cybersecurity landscape, where attack vectors are increasingly sophisticated and diverse. Traditional signature-based systems, while exceptionally fast at identifying known threats, struggle significantly against zero-day exploits and highly obfuscated attacks. Conversely, pure anomaly-based systems, though capable of detecting novel attacks, often suffer from high false-positive rates and significant computational overhead. Therefore, the primary objective of this project is to architect a hybrid IDS that seamlessly integrates the deterministic, high-speed detection capabilities of Snort 3 (signature-based) with the adaptive, intelligent anomaly detection of Machine Learning models (anomaly-based). This section outlines the comprehensive requirements gathered through analysis of existing solutions and specific project goals to ensure the system is both functionally robust and operationally viable in a real-world network environment.
+
+2.1.1 User Requirements
+The end-users of this system are primarily network administrators, security analysts, and IT operations personnel. Their requirements focus heavily on visibility, operational ease of use, and receiving actionable intelligence quickly:
+- Centralized Monitoring Dashboard: Users require a single, unified web-based dashboard to monitor the security posture of the entire network. Administrators must not be forced to log into individual target machines (nodes) via SSH or RDP to check for local intrusions.
+- Instantaneous Notifications: Security analysts demand real-time alerts the moment an intrusion or suspicious activity is detected. Traditional polling delays (e.g., refreshing a page every 30 seconds) are unacceptable during an active, high-speed attack like a DDoS flood. The system must actively push these alerts to the UI immediately.
+- Comprehensive Threat Context: Alerts presented to the user must be rich in context and easily interpretable. Users need specific details including: the attacking source IP address, the target hostname, the predicted attack category (e.g., DDoS, Port Scan, Brute Force, Web Attack), the statistical confidence level of the ML prediction, the exact timestamp, and the origin of the alert (whether it was triggered by the ML anomaly engine or a specific Snort signature).
+- Visual Analytics and Historical Data: Users require graphical representations of network health to quickly assess the threat landscape. This includes time-series charts showing attack distributions over the last 24 hours, detailed model performance metrics (Accuracy, F1-Score, Confusion Matrices) to build trust in the ML engine, and geographical maps highlighting the origins of external threats.
+- Distributed Sensor Management: Administrators need the ability to view the holistic health of the monitoring network. They require a grid view showing the status (online, offline, last heartbeat time) of all deployed `live_agents` and `snort_sensors` across various target machines at a glance.
+- Interactive Verification Tools: Analysts require a built-in sandbox or manual prediction tool within the dashboard to input artificial network statistics and test how the underlying Machine Learning models (Random Forest, SVM, KNN) classify specific, hypothetical traffic patterns.
+
+2.1.2 Functional Requirements
+To satisfy the user requirements, the system must implement a specific set of technical capabilities. These functional requirements dictate exactly what the system must do programmatically:
+- Continuous Data Collection Agent: The system must provide a lightweight, Python-based agent (`live_agent.py`) deployable on target machines. This agent must continuously hook into the network interface to capture specific statistics (bytes/sec, packets/sec, forward/backward lengths) and TCP connection states (SYN, ACK, FIN, RST flags) at a strict, configurable interval (e.g., every 2.0 seconds).
+- Feature Vector Transformation: The agent must possess the logic to transform the raw captured network data into a standardized, 40+ dimensional feature vector. This vector must strictly mirror the exact mathematical format and feature order of the preprocessed CICIDS2017 dataset used during the initial ML model training phase to ensure inference compatibility.
+- Signature-Based Engine Integration: The system must incorporate Snort 3, running either natively or within a Docker container, to inspect packet payloads and headers against a predefined, customizable set of rules (`local.rules`). Upon a rule match, Snort must output the triggered alert in a structured JSON format (`alert.json`).
+- Asynchronous API Gateway: The central Flask server (`app.py`) must expose robust, non-blocking RESTful API endpoints. Specifically, it must provide `/api/monitor` to receive real-time ML feature vectors from distributed agents, and `/api/snort/alert` to receive forwarded JSON logs from remote Snort sensors.
+- Real-Time Machine Learning Inference: Upon receiving a feature vector payload via the API, the server must dynamically scale the data using a pre-loaded `StandardScaler` (saved via `joblib`). It must then execute an immediate inference request against the primary pre-trained model (Random Forest) to predict the traffic class and calculate the prediction probability.
+- Bi-directional WebSocket Communication: The server must implement `Flask-SocketIO` alongside an asynchronous event loop (e.g., `eventlet`) to establish persistent WebSocket connections with web clients. It must broadcast threat intelligence (JSON payloads) to all connected clients the exact millisecond an anomaly is predicted or a signature match is processed.
+- Dynamic Metric Loading and Serving: The Flask backend must dynamically read, parse, and serve model evaluation metrics from pre-calculated configuration files (`results.json`, `feature_names.pkl`) generated during the offline training phase, ensuring the dashboard always reflects the most current model states.
+
+2.1.3 Non-functional Requirements
+Non-functional requirements define the critical quality attributes of the system. To ensure clarity and testability, these requirements are defined using strict, quantitative metrics rather than qualitative descriptions:
+
+*   Performance and Latency:
+    *   ML Inference Speed: The central server must evaluate and predict the class of a single incoming feature vector in < 50 milliseconds (ms).
+    *   End-to-End Alert Latency: The total time elapsed from the moment an agent detects an anomaly (or Snort triggers a rule) to the moment the alert is rendered on the administrator's WebSocket-connected web dashboard must be < 500 milliseconds (ms).
+    *   Snort Throughput: The Snort 3 container must be capable of processing network traffic at a rate of at least 1 Gbps (Gigabit per second) without experiencing dropped packets under normal load.
+
+*   Detection Accuracy and Reliability (Based on CICIDS2017 Testing):
+    *   Overall Accuracy: The primary Machine Learning model (Random Forest) must maintain an overall classification accuracy of > 99.0% across all test datasets.
+    *   F1-Macro Score: Crucially, to ensure minority attack classes (e.g., Botnets, Brute Force) are not overshadowed by massive classes (e.g., Benign, DDoS), the model must achieve an F1-Macro score of > 95.0%.
+    *   False Positive Rate (FPR): The system must maintain an FPR of < 1.0% to minimize "alert fatigue" for security administrators.
+
+*   Scalability and Concurrency:
+    *   Agent Concurrency: The central Flask server must successfully handle concurrent, persistent connections and heartbeat signals from up to 100 distributed `live_agent` nodes simultaneously.
+    *   API Throughput: The `/api/monitor` endpoint must be capable of processing up to 1,000 Requests Per Second (RPS) without response times degrading beyond 100ms.
+
+*   Resource Efficiency (Hardware Constraints):
+    *   Agent Footprint: The `live_agent.py` script running on target machines must be extremely lightweight. It must consume < 5% CPU utilization and < 50 MB of RAM to guarantee zero interference with the target machine's primary operations or services.
+    *   Server Footprint: The central monitoring server (running Flask, SocketIO, the loaded RF model, and the Snort Docker container) must operate efficiently within a footprint of 4 CPU cores and 8 GB of RAM.
+
+*   Availability and Fault Tolerance:
+    *   System Uptime: The central monitoring dashboard and API gateway must target an operational uptime of 99.9%.
+    *   Agent Auto-Recovery: In the event of a network disruption or server restart, the remote `live_agents` must automatically attempt to reconnect to the central server within < 5.0 seconds, ensuring minimal monitoring downtime.

@@ -3,7 +3,7 @@ DATA OVERVIEW
 ======================================================================
 
 Shape: (2830743, 79)
-Memory: 991.6 MB
+Memory: 1013.3 MB
 
 Data Types:
 Destination Port               float32
@@ -16,13 +16,13 @@ Idle Mean                      float32
 Idle Std                       float32
 Idle Max                       float32
 Idle Min                       float32
-Label                              str
+Label                           object
 Length: 79, dtype: object
 
 Descriptive Statistics:
        Destination Port  Flow Duration  Total Fwd Packets  ...      Idle Std     Idle Max     Idle Min
 count      2.830743e+06      2830743.0       2.830743e+06  ...  2.830743e+06    2830743.0    2830743.0
-mean       8.071482e+03     14785665.0       9.361160e+00  ...  5.038439e+05    8695752.0    7920031.0
+mean       8.071479e+03     14785659.0       9.361161e+00  ...  5.038439e+05    8695756.0    7920031.0
 std        1.828363e+04     33653744.0       7.496728e+02  ...  4.602984e+06   24366888.0   23363418.0
 min        0.000000e+00          -13.0       1.000000e+00  ...  0.000000e+00          0.0          0.0
 25%        5.300000e+01          155.0       2.000000e+00  ...  0.000000e+00          0.0          0.0

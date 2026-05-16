@@ -1,6 +1,6 @@
 {
   "version": "v8",
-  "timestamp": "2026-05-04T15:00:14.938852",
+  "timestamp": "2026-05-05T12:07:50.174780",
   "config": {
     "CORR_THRESHOLD": 0.95,
     "TOP_N_FEATURES": 40,
@@ -10,4 +10,137 @@
   },
   "rows_dropped": {
     "duplicates": 331200,
-    "unmapped_labels": 
+    "unmapped_labels": 2190,
+    "train_val_test": {
+      "train": 1748147,
+      "val": 374603,
+      "test": 374603
+    }
+  },
+  "features_removed": {
+    "low_variance": [
+      "Bwd PSH Flags",
+      "Fwd URG Flags",
+      "Bwd URG Flags",
+      "RST Flag Count",
+      "CWE Flag Count",
+      "ECE Flag Count",
+      "Fwd Avg Bytes/Bulk",
+      "Fwd Avg Packets/Bulk",
+      "Fwd Avg Bulk Rate",
+      "Bwd Avg Bytes/Bulk",
+      "Bwd Avg Packets/Bulk",
+      "Bwd Avg Bulk Rate"
+    ],
+    "correlation": [
+      "Total Fwd Packets",
+      "Total Backward Packets",
+      "Total Length of Fwd Packets",
+      "Fwd Packet Length Std",
+      "Bwd Packet Length Max",
+      "Bwd Packet Length Std",
+      "Fwd IAT Total",
+      "Fwd IAT Max",
+      "Fwd PSH Flags",
+      "Fwd Header Length",
+      "Fwd Packets/s",
+      "Max Packet Length",
+      "Packet Length Mean",
+      "Avg Fwd Segment Size",
+      "Avg Bwd Segment Size",
+      "Subflow Fwd Packets",
+      "Subflow Bwd Packets",
+      "Subflow Bwd Bytes",
+      "Idle Mean",
+      "Idle Max",
+      "Idle Min"
+    ]
+  },
+  "class_distribution": {},
+  "step_times": {
+    "load": 38.305490255355835,
+    "eda": 39.15264105796814,
+    "handle_nan": 8.325255393981934,
+    "dedup": 23.83795952796936,
+    "remove_id": 0.0,
+    "port_encoding": 0.29108500480651855,
+    "feature_interactions": 0.03381514549255371,
+    "label_map": 2.343059539794922,
+    "remove_tiny": 0.18567442893981934,
+    "encode_labels": 0.6737809181213379,
+    "split": 6.318522214889526,
+    "variance_threshold": 7.285621881484985,
+    "rf_temp": 55.376832723617554,
+    "correlation": 1.5070445537567139,
+    "feature_selection": 155.7229127883911,
+    "power_transform": 149.63069438934326,
+    "scaler_smote": 1.372663974761963,
+    "smote": 47.50934457778931,
+    "shuffle": 2.2541303634643555,
+    "outlier_clipping": 0.5380527973175049,
+    "retrain_rf": 968.9399254322052,
+    "final_scaling": 4.158483266830444
+  },
+  "pipeline_steps": [
+    "Initial rows: 2,830,743",
+    "Final rows: 9,458,662",
+    "Features: 40 (from 61)",
+    "Train/Val/Test: 8,709,456 / 374,603 / 374,603",
+    "SMOTE: Yes (sampling_strategy=not majority)",
+    "Power Transform: Yes (Yeo-Johnson)",
+    "StandardScaler: True",
+    "Total time: 1527.8s"
+  ],
+  "leakage_check": {
+    "critical_leakage": [],
+    "suspicious_features": [
+      [
+        "Packet Length Std",
+        0.5055473336404299,
+        0.5066973406200554
+      ],
+      [
+        "Packet Length Variance",
+        0.46392553325775204,
+        0.5061925247406687
+      ],
+      [
+        "Average Packet Size",
+        0.45510091084095805,
+        0.5372271645654538
+      ],
+      [
+        "flow_byte_ratio",
+        0.011946457801984505,
+        0.5223388443500281
+      ]
+    ],
+    "total_critical": 0,
+    "total_suspicious": 4
+  },
+  "smote_imbalance_ratio": 1.0,
+  "pipeline_order": [
+    "load_csv",
+    "eda",
+    "handle_nan",
+    "drop_duplicates",
+    "remove_identifiers",
+    "encode_port",
+    "feature_interactions",
+    "map_labels",
+    "remove_tiny_classes",
+    "encode_labels",
+    "train_val_test_split",
+    "variance_threshold",
+    "rf_importance",
+    "correlation_filter",
+    "feature_selection",
+    "power_transform",
+    "scaler_before_smote",
+    "smote",
+    "shuffle",
+    "outlier_clipping",
+    "retrain_rf",
+    "final_scaler"
+  ]
+}

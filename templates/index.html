@@ -132,20 +132,75 @@
         <thead>
           <tr style="border-bottom: 2px solid #0f3460;">
             <th style="padding: 10px; color: #a0aabf;">Time</th>
-            <th style="padding: 10px; color: #a0aabf;">Source IP</th>
+            <th style="padding: 10px; color: #a0aabf;">Source</th>
             <th style="padding: 10px; color: #a0aabf;">Prediction</th>
             <th style="padding: 10px; color: #a0aabf;">Confidence</th>
           </tr>
         </thead>
         <tbody id="realtimeLogs">
           <!-- Logs will be prepended here by SocketIO -->
-          <tr><td colspan="4" style="text-align:center; padding: 20px; color: #666;">Waiting for traffic...</td></tr>
+          <tr><td colspan="4" style="text-align:center; padding: 20px; color: #666;">Waiting for traffic from agents...</td></tr>
         </tbody>
       </table>
     </div>
   </section>
 
-  <!-- ── SECTION 5: LIVE PREDICTION (MANUAL) ──────────────────────────────── -->
+  <!-- ── SECTION 5: SNORT3 ALERTS ──────────────────────────────────────────── -->
+  <section class="card">
+    <div class="card-header">
+      <h2>🔬 Snort3 IDS Alerts</h2>
+      <span class="badge badge-red">Signature-based Detection</span>
+    </div>
+    <p class="section-desc">
+      Cảnh báo từ Snort3 — phát hiện tấn công dựa trên luật (signature-based) kết hợp với ML behavior-based.
+    </p>
+
+    <div class="snort3-header">
+      <div class="snort3-status" id="snortStatus">
+        <span class="dot off" id="snortDot"></span>
+        <span id="snortStatusText">Checking...</span>
+      </div>
+      <div class="snort3-controls">
+        <button class="btn btn-outline" onclick="refreshSnortStatus()">🔄 Refresh</button>
+        <button class="btn btn-outline btn-danger-outline" onclick="startSnortSimulation()">▶ Simulate</button>
+        <button class="btn btn-outline btn-ghost" onclick="stopSnortSimulation()">⏹ Stop Sim</button>
+      </div>
+    </div>
+
+    <!-- Sensor Health -->
+    <div class="sensor-grid" id="sensorGrid">
+      <div style="text-align:center; padding: 10px; color: #666;">No remote sensors connected</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="snort3-stats-grid" id="snortStats">
+      <div class="snort3-stat"><div class="stat-number" id="snortTotalAlerts">0</div><div class="stat-label">Total</div></div>
+      <div class="snort3-stat"><div class="stat-number" id="snortDDoS">0</div><div class="stat-label">DDoS</div></div>
+      <div class="snort3-stat"><div class="stat-number" id="snortDoS">0</div><div class="stat-label">DoS</div></div>
+      <div class="snort3-stat"><div class="stat-number" id="snortPortScan">0</div><div class="stat-label">PortScan</div></div>
+      <div class="snort3-stat"><div class="stat-number" id="snortBruteForce">0</div><div class="stat-label">BruteForce</div></div>
+      <div class="snort3-stat"><div class="stat-number" id="snortBot">0</div><div class="stat-label">Bot</div></div>
+      <div class="snort3-stat"><div class="stat-number" id="snortWebAttack">0</div><div class="stat-label">WebAttack</div></div>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="snort3-filter-bar">
+      <button class="filter-btn active" data-type="ALL" onclick="filterSnortAlerts('ALL', this)">🔴 ALL</button>
+      <button class="filter-btn filter-ddos" data-type="DDoS" onclick="filterSnortAlerts('DDoS', this)">DDoS</button>
+      <button class="filter-btn filter-dos" data-type="DoS" onclick="filterSnortAlerts('DoS', this)">DoS</button>
+      <button class="filter-btn filter-portscan" data-type="PortScan" onclick="filterSnortAlerts('PortScan', this)">PortScan</button>
+      <button class="filter-btn filter-bruteforce" data-type="BruteForce" onclick="filterSnortAlerts('BruteForce', this)">BruteForce</button>
+      <button class="filter-btn filter-bot" data-type="Bot" onclick="filterSnortAlerts('Bot', this)">Bot</button>
+      <button class="filter-btn filter-webattack" data-type="WebAttack" onclick="filterSnortAlerts('WebAttack', this)">WebAttack</button>
+    </div>
+
+    <!-- Alert list -->
+    <div class="snort3-alert-list" id="snortAlertList">
+      <div style="text-align:center; padding: 30px; color: #666;">Waiting for Snort3 alerts...</div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 6: LIVE PREDICTION (MANUAL) ──────────────────────────────── -->
   <section class="card">
     <div class="card-header">
       <h2>🔍 Live Prediction</h2>
@@ -214,6 +269,7 @@
 
     socket.on('connect', function() {
         console.log('Websocket connected!');
+        refreshSnortStatus();
     });
 
     socket.on('new_alert', function(msg) {
@@ -223,9 +279,14 @@
         row.style.borderBottom = "1px solid #0f3460";
         row.style.background = "rgba(255, 101, 132, 0.1)"; // highlight red
         
+        const srcLabel = msg.source === 'live_agent' ? 'LIVE' : msg.source || 'AGENT';
+        const hostDisplay = msg.hostname ? `${msg.hostname}` : msg.source_ip;
         row.innerHTML = `
-          <td style="padding: 10px;">${msg.timestamp}</td>
-          <td style="padding: 10px; font-weight: bold;">${msg.source_ip}</td>
+          <td style="padding: 10px; font-size:0.78rem;">${msg.timestamp}</td>
+          <td style="padding: 10px;">
+            <span style="font-size:0.65rem; background:rgba(255,71,87,0.12); color:#ff6584; padding:0.1rem 0.4rem; border-radius:8px;">${srcLabel}</span>
+            <span style="font-size:0.75rem; margin-left:0.3rem;">${hostDisplay}</span>
+          </td>
           <td style="padding: 10px;"><span class="badge badge-red">${msg.prediction}</span></td>
           <td style="padding: 10px;">${msg.confidence}%</td>
         `;
@@ -241,9 +302,14 @@
         const row = document.createElement('tr');
         row.style.borderBottom = "1px solid #0f3460";
         
+        const srcLabelN = msg.source === 'live_agent' ? 'LIVE' : msg.source || 'AGENT';
+        const hostDisplayN = msg.hostname ? `${msg.hostname}` : msg.source_ip;
         row.innerHTML = `
-          <td style="padding: 10px;">${msg.timestamp}</td>
-          <td style="padding: 10px;">${msg.source_ip}</td>
+          <td style="padding: 10px; font-size:0.78rem;">${msg.timestamp}</td>
+          <td style="padding: 10px;">
+            <span style="font-size:0.65rem; background:rgba(0,201,167,0.12); color:#00C9A7; padding:0.1rem 0.4rem; border-radius:8px;">${srcLabelN}</span>
+            <span style="font-size:0.75rem; margin-left:0.3rem;">${hostDisplayN}</span>
+          </td>
           <td style="padding: 10px;"><span class="badge badge-green">${msg.prediction}</span></td>
           <td style="padding: 10px;">${msg.confidence}%</td>
         `;
@@ -251,6 +317,31 @@
         logsTbody.prepend(row);
         logCount++;
         if(logCount > 50) logsTbody.lastElementChild.remove();
+    });
+
+    // ── Snort3 WebSocket Events ───────────────────────────────────────────
+    socket.on('snort_alert', function(alert) {
+        const container = document.getElementById('snortAlertList');
+        const placeholder = container.querySelector('div[style*="text-align:center"]');
+        if (placeholder) container.innerHTML = '';
+
+        const colors = SNORT_TYPE_COLORS[alert.type] || SNORT_TYPE_COLORS['Unknown'];
+        const time = alert.timestamp ? formatSnortTime(alert.timestamp) : '--';
+        const srcStr = alert.src_ip ? `${alert.src_ip}:${alert.src_port || ''}` : '--';
+
+        const row = document.createElement('div');
+        row.className = 'snort3-alert-row';
+        row.innerHTML = `
+          <span class="alert-type-badge type-${alert.type}" style="background:${colors.bg};color:${colors.text};border-color:${colors.border}">${alert.type || 'UNK'}</span>
+          <span class="snort-alert-msg">${alert.msg || alert.type + ' detected'}</span>
+          <span class="snort-alert-ip">${srcStr}</span>
+          <span class="snort-alert-src">${alert.source === 'snort3_sim' ? 'SIM' : 'SNORT3'}</span>
+          <span class="snort-alert-time">${time}</span>
+        `;
+
+        container.prepend(row);
+        if (container.children.length > 100) container.lastElementChild.remove();
+        loadSnortAlerts(); // refresh stats
     });
   });
 </script>

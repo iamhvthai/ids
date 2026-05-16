@@ -9,10 +9,12 @@ Routes:
 
 import os
 import json
+import time
 import numpy as np
 import joblib
 from flask import Flask, render_template, jsonify, request
 from flask_socketio import SocketIO, emit
+from src.snort_bridge import bridge as snort_bridge
 
 BASE_DIR   = os.path.dirname(os.path.abspath(__file__))
 MODEL_DIR  = os.path.join(BASE_DIR, "models")
@@ -29,7 +31,7 @@ def load_models():
     fe_names = []
 
     try:
-        scaler   = joblib.load(os.path.join(MODEL_DIR, "scaler.pkl"))
+        scaler   = joblib.load(os.path.join(MODEL_DIR, "scaler_before_smote.pkl"))
         fe_names = joblib.load(os.path.join(MODEL_DIR, "feature_names.pkl"))
 
         for name, fname in [
@@ -152,8 +154,20 @@ def api_monitor():
             "source_ip": source_ip,
             "prediction": label,
             "confidence": prob,
-            "timestamp": data.get("timestamp", "Now")
+            "timestamp": data.get("timestamp", "Now"),
+            "hostname": data.get("hostname", source_ip),
+            "source": "live_agent",
         }
+
+        # Track live agent as sensor
+        _update_sensor({
+            "sensor_id": f"live-{source_ip}",
+            "sensor_name": data.get("hostname", f"Agent-{source_ip}"),
+            "sensor_hostname": data.get("hostname", source_ip),
+            "timestamp": data.get("timestamp", time.time()),
+            "type": "agent",
+            "source": "live_agent",
+        })
 
         # NẾU PHÁT HIỆN BẤT THƯỜNG (!= BENIGN), GỬI QUA WEB SOCKET NGAY LẬP TỨC
         if label != "BENIGN":
@@ -169,10 +183,100 @@ def api_monitor():
         return jsonify({"error": str(e)}), 400
 
 
+# ── Snort3 Routes ──────────────────────────────────────────────────────────────
+SNORT_ALERTS = []       # In-memory alert store
+SENSORS = {}            # sensor_id -> last heartbeat info
+
+
+def _update_sensor(data):
+    sid = data.get("sensor_id")
+    if not sid:
+        return
+    SENSORS[sid] = {
+        "sensor_id": sid,
+        "name": data.get("sensor_name", sid),
+        "hostname": data.get("sensor_hostname", "unknown"),
+        "last_seen": time.time(),
+        "last_alert": data.get("timestamp", time.time()),
+        "type": data.get("type", "unknown"),
+        "source": data.get("source", "unknown"),
+    }
+
+@app.route("/api/snort/status")
+def snort_status():
+    running, detail = snort_bridge.container_status()
+    return jsonify({
+        "running": running,
+        "detail": detail,
+        "alert_count": len(SNORT_ALERTS),
+        "simulation": snort_bridge.simulation_mode,
+    })
+
+@app.route("/api/snort/start", methods=["POST"])
+def snort_start():
+    success, msg = snort_bridge.start_container()
+    return jsonify({"success": success, "message": msg})
+
+@app.route("/api/snort/stop", methods=["POST"])
+def snort_stop():
+    if snort_bridge.simulation_mode:
+        snort_bridge.stop_simulation()
+    success, msg = snort_bridge.stop_container()
+    return jsonify({"success": success, "message": msg})
+
+@app.route("/api/snort/alert", methods=["POST"])
+def snort_alert():
+    alert = request.get_json(force=True)
+    alert["received_at"] = time.time()
+    _update_sensor(alert)
+
+    # Heartbeat-only alerts don't go to main alert list
+    if alert.get("type") == "heartbeat":
+        return jsonify({"status": "ok", "sensor_known": True})
+
+    SNORT_ALERTS.insert(0, alert)
+    if len(SNORT_ALERTS) > 500:
+        SNORT_ALERTS.pop()
+    socketio.emit("snort_alert", alert)
+    return jsonify({"status": "ok"})
+
+@app.route("/api/snort/alerts")
+def snort_alerts():
+    alert_type = request.args.get("type", "ALL")
+    limit = int(request.args.get("limit", 50))
+    if alert_type and alert_type != "ALL":
+        filtered = [a for a in SNORT_ALERTS if a.get("type") == alert_type]
+    else:
+        filtered = SNORT_ALERTS
+    return jsonify(filtered[:limit])
+
+@app.route("/api/snort/simulate", methods=["POST"])
+def snort_simulate():
+    data = request.get_json(force=True) or {}
+    csv_path = data.get("csv_path")
+    success, msg = snort_bridge.start_simulation(csv_path=csv_path)
+    return jsonify({"success": success, "message": msg})
+
+@app.route("/api/snort/sensors")
+def snort_sensors():
+    now = time.time()
+    active = []
+    for sid, info in SENSORS.items():
+        alive = (now - info["last_seen"]) < 60
+        active.append({**info, "alive": alive})
+    return jsonify(active)
+
+@app.route("/api/snort/simulate/stop", methods=["POST"])
+def snort_simulate_stop():
+    success, msg = snort_bridge.stop_simulation()
+    return jsonify({"success": success, "message": msg})
+
+
 if __name__ == "__main__":
     print("=" * 50)
     print("  IDS Web Dashboard (Real-time SocketIO)")
     print("  http://127.0.0.1:5000")
+    print("  Snort3 Integration Active")
     print("=" * 50)
     if not MODELS:
         print("[WARN] No models found. Run 'python src/train.py' first!")
