@@ -164,6 +164,7 @@ class SnortBridge:
             alert = {
                 "timestamp": data.get("timestamp", datetime.now().isoformat()),
                 "src_ip": data.get("src_addr", "unknown"),
+                "source_ip": data.get("src_addr", "unknown"),
                 "src_port": data.get("src_port", 0),
                 "dst_ip": data.get("dst_addr", "unknown"),
                 "dst_port": data.get("dst_port", 0),
@@ -213,7 +214,11 @@ class SnortBridge:
         try:
             df = pd.read_csv(csv_path, low_memory=False)
             df.columns = df.columns.str.strip()
-            attack_samples = df[~df['Label'].str.contains('BENIGN', na=False)].sample(50)
+            attack_df = df[~df['Label'].str.contains('BENIGN', na=False)]
+            if attack_df.empty:
+                return
+            sample_size = min(50, len(attack_df))
+            attack_samples = attack_df.sample(sample_size)
             label_to_type = {
                 'DDOS': 'DDoS', 'DDoS': 'DDoS',
                 'DoS': 'DoS', 'DOS': 'DoS',

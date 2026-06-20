@@ -1,6 +1,8 @@
+import os
 import time
 import json
 import random
+import socket
 import requests
 import pandas as pd
 from datetime import datetime
@@ -9,13 +11,36 @@ from datetime import datetime
 # CẤU HÌNH AGENT
 # ============================================================
 SERVER_URL = "http://127.0.0.1:5000/api/monitor"
+SERVER_BASE = "http://127.0.0.1:5000"
 DATA_FILE  = "data/Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv" # File dùng để mô phỏng
 DELAY_SECONDS = 0.5 # Tốc độ gửi (giây/luồng)
 
 print("=" * 50)
-print("  🛡️ IDS Agent - Real-time Traffic Monitor")
+print("  IDS Agent - Real-time Traffic Monitor")
 print(f"  Target Server: {SERVER_URL}")
 print("=" * 50)
+
+# Hỏi email để nhận cảnh báo
+email = os.environ.get("ALERT_EMAIL", "")
+if not email:
+    inp = input("Enter email for alerts (or press Enter to skip): ").strip()
+    if inp:
+        email = inp
+
+if email:
+    hostname = socket.gethostname()
+    try:
+        res = requests.post(
+            f"{SERVER_BASE}/api/register-email",
+            json={"email": email, "hostname": hostname},
+            timeout=5
+        )
+        if res.status_code == 200:
+            print(f"  Email registered: {email}")
+        else:
+            print(f"  Email registration failed: {res.text}")
+    except Exception as e:
+        print(f"  Email registration error: {e}")
 
 # 1. Đọc file CSV
 try:
@@ -59,19 +84,19 @@ for index, row in demo_df.iterrows():
                 
                 # Hiển thị log trên console của máy đích
                 if pred != "BENIGN":
-                    print(f"🚨 [ALERT] Sent Flow {index+1:02d} -> Server detected: {pred} ({conf}%)")
+                    print(f"[ALERT] Sent Flow {index+1:02d} -> Server detected: {pred} ({conf}%)")
                 else:
-                    print(f"✅ [ OK  ] Sent Flow {index+1:02d} -> Server detected: {pred}")
+                    print(f"[ OK  ] Sent Flow {index+1:02d} -> Server detected: {pred}")
         else:
-            print(f"⚠️ [WARN] Server returned status {res.status_code}")
+            print(f"[WARN] Server returned status {res.status_code}")
             
     except requests.exceptions.ConnectionError:
-        print("❌ [ERROR] Could not connect to server. Is Flask app running?")
+        print("[ERROR] Could not connect to server. Is Flask app running?")
         break
     except Exception as e:
-        print(f"❌ [ERROR] {e}")
+        print(f"[ERROR] {e}")
 
     # Chờ trước khi gửi gói tiếp theo (mô phỏng real-time)
     time.sleep(DELAY_SECONDS)
 
-print("\n🎉 Simulation finished.")
+print("\nSimulation finished.")

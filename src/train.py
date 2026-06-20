@@ -34,8 +34,9 @@ from sklearn.neighbors       import KNeighborsClassifier
 from sklearn.ensemble        import RandomForestClassifier
 from sklearn.svm             import LinearSVC
 from sklearn.calibration     import CalibratedClassifierCV
-from sklearn.model_selection import RandomizedSearchCV
+from sklearn.model_selection import RandomizedSearchCV, train_test_split
 from sklearn.preprocessing   import label_binarize
+from sklearn.utils.class_weight import compute_sample_weight
 from sklearn.metrics         import (accuracy_score, precision_score,
                                      recall_score, f1_score,
                                      confusion_matrix, classification_report,
@@ -226,15 +227,16 @@ def train_and_evaluate():
     print("\n[1/3] Training KNN (k=15, distance-weighted, ball_tree)...")
     t0 = time.time()
 
-    MAX_KNN = 200_000
-    MAX_RF  = 500_000   # subsample cho RF (tránh OOM với 8.7M SMOTE rows)
-    MAX_SVM = 300_000   # subsample cho SVM
+    MAX_KNN = 150_000
+    MAX_RF  = 400_000   # subsample cho RF (tránh OOM với SMOTE rows)
+    MAX_SVM = 250_000   # subsample cho SVM
     if len(X_train) > MAX_KNN:
-        print(f"  KNN: subsampling {MAX_KNN:,} / {len(X_train):,} "
+        print(f"  KNN: stratified subsampling {MAX_KNN:,} / {len(X_train):,} "
               f"(SMOTE set too large for KNN)")
-        rng_knn  = np.random.default_rng(RANDOM_STATE)
-        knn_idx  = rng_knn.choice(len(X_train), MAX_KNN, replace=False)
-        X_knn, y_knn = X_train[knn_idx], y_train[knn_idx]
+        X_knn, _, y_knn, _ = train_test_split(
+            X_train, y_train, train_size=MAX_KNN,
+            stratify=y_train, random_state=RANDOM_STATE
+        )
     else:
         X_knn, y_knn = X_train, y_train
 
@@ -244,7 +246,11 @@ def train_and_evaluate():
         algorithm='ball_tree',   # FIX: nhanh hơn brute force
         n_jobs=-1
     )
-    knn.fit(X_knn, y_knn)
+    knn_sw = compute_sample_weight(class_weight='balanced', y=y_knn)
+    try:
+        knn.fit(X_knn, y_knn, sample_weight=knn_sw)
+    except TypeError:
+        knn.fit(X_knn, y_knn)
     elapsed = time.time() - t0
     trained_models["KNN"] = knn
     print(f"  [OK] Trained in {elapsed:.1f}s")
@@ -271,18 +277,21 @@ def train_and_evaluate():
     t0 = time.time()
 
     if len(X_train) > MAX_RF:
-        print(f"  RF: subsampling {MAX_RF:,} / {len(X_train):,} (avoid OOM in CV)")
-        rng_rf  = np.random.default_rng(RANDOM_STATE)
-        rf_idx  = rng_rf.choice(len(X_train), MAX_RF, replace=False)
-        X_rf, y_rf = X_train[rf_idx], y_train[rf_idx]
+        print(f"  RF: stratified subsampling {MAX_RF:,} / {len(X_train):,} (avoid OOM in CV)")
+        X_rf, _, y_rf, _ = train_test_split(
+            X_train, y_train, train_size=MAX_RF,
+            stratify=y_train, random_state=RANDOM_STATE
+        )
     else:
         X_rf, y_rf = X_train, y_train
 
     param_dist = {
-        "n_estimators"     : [200, 300, 500],
-        "max_depth"        : [None, 20, 30],
-        "min_samples_split": [2, 5],
+        "n_estimators"     : [300, 500, 700],
+        "max_depth"        : [None, 20, 30, 40],
+        "min_samples_split": [2, 5, 10],
+        "min_samples_leaf" : [1, 2, 4],
         "max_features"     : ["sqrt", "log2"],
+        "class_weight"     : ['balanced'],
     }
     rf_base   = RandomForestClassifier(
         n_jobs=-1,
@@ -292,9 +301,9 @@ def train_and_evaluate():
     rf_search = RandomizedSearchCV(
         rf_base,
         param_distributions=param_dist,
-        n_iter=10,
+        n_iter=12,
         cv=3,
-        scoring='f1_weighted',
+        scoring='f1_macro',
         n_jobs=1,          # FIX: n_jobs=1 in CV to avoid subprocess OOM
         random_state=RANDOM_STATE,
         verbose=1
@@ -328,15 +337,17 @@ def train_and_evaluate():
     t0  = time.time()
 
     if len(X_train) > MAX_SVM:
-        print(f"  SVM: subsampling {MAX_SVM:,} / {len(X_train):,} (avoid OOM)")
-        rng_svm  = np.random.default_rng(RANDOM_STATE + 1)
-        svm_idx  = rng_svm.choice(len(X_train), MAX_SVM, replace=False)
-        X_svm, y_svm = X_train[svm_idx], y_train[svm_idx]
+        print(f"  SVM: stratified subsampling {MAX_SVM:,} / {len(X_train):,} (avoid OOM)")
+        X_svm, _, y_svm, _ = train_test_split(
+            X_train, y_train, train_size=MAX_SVM,
+            stratify=y_train, random_state=RANDOM_STATE
+        )
     else:
         X_svm, y_svm = X_train, y_train
 
     svc = CalibratedClassifierCV(
-        LinearSVC(C=0.5, max_iter=5000, random_state=RANDOM_STATE),
+        LinearSVC(C=0.5, max_iter=5000, random_state=RANDOM_STATE,
+                  class_weight='balanced'),
         cv=3
     )
     svc.fit(X_svm, y_svm)
@@ -368,6 +379,14 @@ def train_and_evaluate():
                  .replace(")", "") + ".pkl")
         joblib.dump(model, os.path.join(MODEL_DIR, fname))
         print(f"  Saved: {fname}")
+
+    print("\nSaving ensemble members (soft voting in app.py)...")
+    with open(os.path.join(MODEL_DIR, "ensemble_members.json"), "w") as f:
+        json.dump({
+            "members": ["knn", "random_forest", "svm_linear"],
+            "voting": "soft"
+        }, f)
+    print("  Saved: ensemble_members.json")
 
     print("\nGenerating comparison chart...")
     plot_comparison(all_results, os.path.join(CHART_DIR, "comparison.png"))

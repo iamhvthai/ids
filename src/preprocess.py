@@ -46,6 +46,7 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder, PowerTransformer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.inspection import permutation_importance
 from sklearn.feature_selection import mutual_info_classif, VarianceThreshold
+from sklearn.utils.class_weight import compute_class_weight
 from imblearn.over_sampling import SMOTE
 from datetime import datetime
 
@@ -82,7 +83,7 @@ TOP_N_FEATURES = 40  # Will be dynamic if FEATURE_IMP_THRESHOLD is set
 FEATURE_IMP_THRESHOLD = None  # If None, use TOP_N_FEATURES; if set, use dynamic
 MIN_CLASS_SIZE = 30
 SMOTE_K_NEIGHBORS = 5
-SMOTE_SAMPLING_STRATEGY = 'not majority'  # Better for multi-class (fix)
+SMOTE_SAMPLING_STRATEGY = 'minority'  # lighter oversampling to reduce synthetic bias
 CORR_SAMPLE_SIZE = 10000
 USE_SCALER = True  # False for RF/XGBoost, True for SVM/KNN
 USE_FLOAT32 = True
@@ -90,6 +91,7 @@ TRAIN_VAL_TEST_SPLIT = (0.7, 0.15, 0.15)
 PERM_IMP_REPEATS = 10  # Reduced from 20 (cost optimization)
 LOG_FILE = os.path.join(MODEL_DIR, "preprocessing_log.json")
 FEATURE_IMPORTANCE_FILE = os.path.join(MODEL_DIR, "feature_importance.json")
+FEATURE_METADATA_FILE = os.path.join(MODEL_DIR, "feature_metadata.json")
 
 # Label mapping
 LABEL_MAP = {
@@ -112,7 +114,7 @@ def preprocess():
     
     start_time = time.time()
     log_data = {
-        "version": "v8",
+        "version": "v9",
         "timestamp": datetime.now().isoformat(),
         "config": {
             "CORR_THRESHOLD": CORR_THRESHOLD,
@@ -273,6 +275,7 @@ def preprocess():
     print("\n[10/17] Train/Val/Test split (70/15/15, stratified)...")
     feature_cols = [c for c in df.columns if c != 'Label']
     X = df[feature_cols].values
+    feature_to_index = {name: idx for idx, name in enumerate(feature_cols)}
     y = df['Label'].values
     X_train, X_temp, y_train, y_temp = train_test_split(
         X, y, test_size=0.3, random_state=RANDOM_STATE, stratify=y
@@ -297,6 +300,7 @@ def preprocess():
     
     # Apply variance threshold only to continuous features
     continuous_idx = [i for i in range(len(feature_cols)) if i not in binary_features]
+    binary_feature_names = [feature_cols[i] for i in sorted(binary_features)]
     vt = None
     all_kept_idx = None
     if continuous_idx:
@@ -372,6 +376,7 @@ def preprocess():
         log_data["features_removed"]["correlation"] = removed_corr
         feature_cols = keep_cols
         print(f"       Dropped {len(drop_corr)} correlated features (kept higher importance)")
+    feature_to_index = {name: idx for idx, name in enumerate(feature_cols)}
     print(f"       Features: {len(feature_cols)}")
     _plot_correlation(corr_abs, os.path.join(CHART_DIR, "02_correlation_matrix.png"))
     log_data["step_times"]["correlation"] = time.time() - step_start
@@ -380,23 +385,20 @@ def preprocess():
     step_start = time.time()
     print(f"\n[14/17] Feature Selection (RF + MI, balanced, normalized, TRAIN only)...")
     
-    # ---------------------------------------------------------
-    # GIẢI PHÁP TỐI ƯU TỐC ĐỘ: Lấy mẫu đại diện (Subsampling)
-    # ---------------------------------------------------------
-    FS_SAMPLE_SIZE = 300000 # Chỉ lấy 100k dòng để tìm Feature
-    
+    # Keep a larger but still bounded subsample to reduce bias on rare classes
+    FS_SAMPLE_SIZE = 200000
     if len(X_train) > FS_SAMPLE_SIZE:
-        print(f"       Subsampling {len(X_train):,} -> {FS_SAMPLE_SIZE:,} rows for faster feature selection...")
-        _, X_fs, _, y_fs = train_test_split(
-            X_train, y_train, 
-            test_size=FS_SAMPLE_SIZE, 
-            stratify=y_train, 
+        print(f"       Stratified subsampling to {FS_SAMPLE_SIZE:,} rows for feature selection...")
+        X_fs, _, y_fs, _ = train_test_split(
+            X_train, y_train,
+            train_size=FS_SAMPLE_SIZE,
+            stratify=y_train,
             random_state=RANDOM_STATE
         )
     else:
         X_fs, y_fs = X_train, y_train
 
-    # Tối ưu: Giảm số cây RF xuống 50 (vì chỉ dùng để rank feature)
+    # Tối ưu: Giảm số cây RF xuống 80 (vì chỉ dùng để rank feature)
     rf_sel = RandomForestClassifier(n_estimators=80, max_depth=15, n_jobs=-1, 
                                     random_state=RANDOM_STATE, class_weight='balanced')
     rf_sel.fit(X_fs, y_fs) # CHẠY TRÊN TẬP SAMPLE
@@ -412,7 +414,7 @@ def preprocess():
     # Normalize both to [0, 1]
     rf_imp_norm = rf_imp / (rf_imp.sum() + 1e-10)
     mi_imp_norm = mi_imp / (mi_imp.sum() + 1e-10)
-    combined_imp = 0.5 * rf_imp_norm + 0.5 * mi_imp_norm
+    combined_imp = 0.6 * rf_imp_norm + 0.4 * mi_imp_norm
     
     # == LEAKAGE DETECTION (ALL features, TRƯỚC feature selection) ==
     # FIX: check toàn bộ features trước khi lọc, không chỉ top N
@@ -499,21 +501,20 @@ def preprocess():
     # Identify binary features
     binary_idx = [i for i, f in enumerate(feature_cols) if f.startswith('is_') or f == 'port_mod_1000']
     continuous_idx = [i for i in range(len(feature_cols)) if i not in binary_idx]
+    feature_transform_flags = {f: (i in binary_idx) for i, f in enumerate(feature_cols)}
 
     pt = None  # FIX: khởi tạo trước để tránh NameError khi save
+    pre_pt_scaler = None
     if continuous_idx:
-        # Clip extreme outliers to prevent numeric overflow in PowerTransformer (Yeo-Johnson)
-        # mà không làm thay đổi phân phối chung của dữ liệu
-        p99 = np.percentile(X_train[:, continuous_idx], 99.9, axis=0)
-        X_train_cont_clipped = np.clip(X_train[:, continuous_idx], a_min=None, a_max=p99)
-        X_val_cont_clipped = np.clip(X_val[:, continuous_idx], a_min=None, a_max=p99)
-        X_test_cont_clipped = np.clip(X_test[:, continuous_idx], a_min=None, a_max=p99)
+        # Clip extreme outliers to reduce sensitivity before feature scaling
+        p99 = np.percentile(X_train[:, continuous_idx], 99.5, axis=0)
+        p01 = np.percentile(X_train[:, continuous_idx], 0.5, axis=0)
+        X_train_cont_clipped = np.clip(X_train[:, continuous_idx], a_min=p01, a_max=p99)
+        X_val_cont_clipped = np.clip(X_val[:, continuous_idx], a_min=p01, a_max=p99)
+        X_test_cont_clipped = np.clip(X_test[:, continuous_idx], a_min=p01, a_max=p99)
 
-        # CỰC KỲ QUAN TRỌNG: Scale dữ liệu về [-1, 1] trước Yeo-Johnson
-        # Yeo-Johnson tính (x+1)^lambda. Nếu x nằm trong [-1, 1] thì (x+1) nằm trong [0, 2]
-        # Điều này giúp loại bỏ 100% khả năng tràn số (overflow) mà vẫn GIỮ NGUYÊN
-        # độ chính xác và phân phối chuẩn hoá của PowerTransformer.
-        pre_pt_scaler = MinMaxScaler(feature_range=(-1, 1))
+        # Use StandardScaler before PowerTransformer to keep the transformation stable
+        pre_pt_scaler = StandardScaler()
         X_train_cont_scaled = pre_pt_scaler.fit_transform(X_train_cont_clipped)
         X_val_cont_scaled = pre_pt_scaler.transform(X_val_cont_clipped)
         X_test_cont_scaled = pre_pt_scaler.transform(X_test_cont_clipped)
@@ -549,6 +550,10 @@ def preprocess():
     X_train = scaler_smote.fit_transform(X_train)
     X_val = scaler_smote.transform(X_val)
     X_test = scaler_smote.transform(X_test)
+    if len(continuous_idx) == 0:
+        X_train = np.clip(X_train, -5, 5)
+        X_val = np.clip(X_val, -5, 5)
+        X_test = np.clip(X_test, -5, 5)
     print(f"       StandardScaler applied (for SMOTE distance)")
     log_data["step_times"]["scaler_smote"] = time.time() - step_start
 
@@ -556,7 +561,11 @@ def preprocess():
     step_start = time.time()
     print(f"\n[17/19] SMOTE (sampling_strategy={SMOTE_SAMPLING_STRATEGY}, TRAIN only)...")
     print(f"       Before: {len(X_train)}")
-    smote = SMOTE(k_neighbors=SMOTE_K_NEIGHBORS, sampling_strategy=SMOTE_SAMPLING_STRATEGY, random_state=RANDOM_STATE)
+    pre_smote_classes = np.unique(y_train)
+    pre_smote_weights = compute_class_weight('balanced', classes=pre_smote_classes, y=y_train)
+    min_class_count = np.min(np.bincount(y_train))
+    smote_k = min(SMOTE_K_NEIGHBORS, max(1, min_class_count - 1))
+    smote = SMOTE(k_neighbors=smote_k, sampling_strategy=SMOTE_SAMPLING_STRATEGY, random_state=RANDOM_STATE)
     X_train, y_train = smote.fit_resample(X_train, y_train)
     print(f"       After: {len(X_train)}")
     unique, counts = np.unique(y_train, return_counts=True)
@@ -643,6 +652,17 @@ def preprocess():
 
     # == SAVE ==
     print(f"\n[SAVE] Saving artifacts...")
+    metadata = {
+        "feature_names": feature_cols,
+        "feature_transform_flags": feature_transform_flags,
+        "binary_features": [f for f, is_binary in feature_transform_flags.items() if is_binary],
+        "continuous_features": [f for f, is_binary in feature_transform_flags.items() if not is_binary],
+        "label_classes": list(le.classes_),
+        "scaler_features": feature_cols,
+    }
+    with open(FEATURE_METADATA_FILE, 'w') as f:
+        json.dump(metadata, f, indent=2, cls=NumpyEncoder)
+    print(f"       ✓ Saved: feature_metadata.json")
     np.save(os.path.join(MODEL_DIR, "X_train.npy"), X_train_scaled)
     np.save(os.path.join(MODEL_DIR, "X_val.npy"), X_val_scaled)
     np.save(os.path.join(MODEL_DIR, "X_test.npy"), X_test_scaled)
@@ -652,12 +672,17 @@ def preprocess():
     joblib.dump(scaler_smote, os.path.join(MODEL_DIR, "scaler_before_smote.pkl"))
     if pt is not None:  # FIX: guard tránh NameError khi không có continuous features
         joblib.dump(pt, os.path.join(MODEL_DIR, "power_transformer.pkl"))
+    if pre_pt_scaler is not None:
+        joblib.dump(pre_pt_scaler, os.path.join(MODEL_DIR, "power_transformer_pre_scaler.pkl"))
     joblib.dump(le, os.path.join(MODEL_DIR, "label_encoder.pkl"))
     joblib.dump(feature_cols, os.path.join(MODEL_DIR, "feature_names.pkl"))
     
     # CRITICAL: Save SMOTE model for reproducibility
     joblib.dump(smote, os.path.join(MODEL_DIR, "smote.pkl"))
     print(f"       ✓ Saved: smote.pkl")
+    # Save pre-SMOTE class weights (for threshold calibration in app.py)
+    np.save(os.path.join(MODEL_DIR, "class_weights.npy"), pre_smote_weights)
+    print(f"       ✓ Saved: class_weights.npy ({len(pre_smote_weights)} classes)")
     
     # CRITICAL: Save VarianceThreshold and feature indices for inference
     if vt is not None:

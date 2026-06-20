@@ -7,25 +7,55 @@ Usage:
   python live_agent.py --server http://192.168.1.100:5000
   python live_agent.py --interval 3.0 --interface "Wi-Fi"
 """
+import sys
 import os
-import re
+
+# Prevent console encoding crashes on Windows
+if hasattr(sys.stdout, 'reconfigure'):
+    try:
+        sys.stdout.reconfigure(errors='replace')
+    except Exception:
+        pass
 import time
 import json
 import socket
-import struct
 import platform
 import argparse
 import subprocess
 import threading
+import base64
 import requests
 from datetime import datetime
 
 SERVER_URL = "http://127.0.0.1:5000"
 MONITOR_ENDPOINT = "/api/monitor"
+HEARTBEAT_ENDPOINT = "/api/agents/heartbeat"
+SCREEN_ENDPOINT = "/api/agents/screen"
 INTERVAL = 2.0  # seconds between samples
 SYSTEM = platform.system().lower()
+FEATURE_METADATA = {}
+FEATURE_METADATA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models", "feature_metadata.json")
+if os.path.exists(FEATURE_METADATA_PATH):
+    try:
+        with open(FEATURE_METADATA_PATH) as _f:
+            FEATURE_METADATA = json.load(_f)
+    except Exception:
+        FEATURE_METADATA = {}
 
-# All 40 features the model expects (matches feature_names.pkl exactly)
+try:
+    import psutil
+    HAS_PSUTIL = True
+except ImportError:
+    HAS_PSUTIL = False
+
+try:
+    import mss
+    import mss.tools
+    HAS_MSS = True
+except ImportError:
+    HAS_MSS = False
+
+# Feature defaults; aligned dynamically with feature_metadata.json when available.
 FEATURE_DEFAULTS = {
     "Destination Port_Raw": 0,
     "Subflow Fwd Bytes": 0,
@@ -76,21 +106,28 @@ class LiveAgent:
         self.interface = interface or self._detect_interface()
         self.interval = interval
         self.hostname = socket.gethostname()
+        self.agent_id = f"agent-{self.hostname}-{os.getpid()}"
         self.running = False
 
         # Previous sample counters for delta calculation
         self._prev = {"bytes": 0, "packets": 0, "time": 0}
         self._stats = {"sent": 0, "failed": 0}
+        self._heartbeat_count = 0
+        self.feature_metadata = FEATURE_METADATA
+        self.feature_names = self.feature_metadata.get("feature_names") or list(FEATURE_DEFAULTS.keys())
+        self.binary_features = set(self.feature_metadata.get("binary_features", [])) or {
+            f for f in self.feature_names if f.startswith("is_") or f == "port_mod_1000"
+        }
 
     def _detect_interface(self):
         if SYSTEM == "windows":
             result = subprocess.run(
                 ["powershell", "-Command",
-                 "(Get-NetAdapter -Physical | Where-Object {$_.Status -eq 'Up'}).Name"],
+                 "(Get-NetAdapter -Physical | Where-Object Status -eq 'Up').Name"],
                 capture_output=True, text=True
             )
-            interfaces = result.stdout.strip().split("\n")
-            return interfaces[0].strip() if interfaces[0].strip() else "Wi-Fi"
+            interfaces = [i.strip() for i in result.stdout.strip().split("\n") if i.strip()]
+            return interfaces[0] if interfaces else "WiFi"
         return "eth0"
 
     def _get_interface_stats(self):
@@ -99,7 +136,10 @@ class LiveAgent:
             try:
                 cmd = (
                     f'(Get-NetAdapterStatistics -Name "{self.interface}" '
-                    f'| Select-Object ReceivedBytes, SentBytes, ReceivedPackets, SentPackets '
+                    f'| Select-Object ReceivedBytes, SentBytes, '
+                    f'ReceivedPackets, SentPackets, '
+                    f'ReceivedUnicastPackets, ReceivedMulticastPackets, ReceivedBroadcastPackets, '
+                    f'SentUnicastPackets, SentMulticastPackets, SentBroadcastPackets '
                     f'| ConvertTo-Json)'
                 )
                 result = subprocess.run(
@@ -107,10 +147,27 @@ class LiveAgent:
                     capture_output=True, text=True, timeout=5
                 )
                 data = json.loads(result.stdout)
-                total_bytes = data.get("ReceivedBytes", 0) + data.get("SentBytes", 0)
-                total_packets = data.get("ReceivedPackets", 0) + data.get("SentPackets", 0)
+                
+                def safe_get(key):
+                    val = data.get(key)
+                    return int(val) if val is not None else 0
+
+                total_bytes = safe_get("ReceivedBytes") + safe_get("SentBytes")
+                
+                rx_pkts = safe_get("ReceivedPackets")
+                if rx_pkts == 0:
+                    rx_pkts = safe_get("ReceivedUnicastPackets") + safe_get("ReceivedMulticastPackets") + safe_get("ReceivedBroadcastPackets")
+                
+                tx_pkts = safe_get("SentPackets")
+                if tx_pkts == 0:
+                    tx_pkts = safe_get("SentUnicastPackets") + safe_get("SentMulticastPackets") + safe_get("SentBroadcastPackets")
+                    
+                total_packets = rx_pkts + tx_pkts
                 return total_bytes, total_packets
-            except Exception:
+            except Exception as e:
+                if not hasattr(self, "_stats_error_logged"):
+                    print(f"\n⚠️  [WARN] Failed to get stats for interface '{self.interface}': {e}")
+                    self._stats_error_logged = True
                 return 0, 0
         elif SYSTEM == "linux":
             try:
@@ -173,6 +230,103 @@ class LiveAgent:
             except Exception:
                 pass
         return connections
+
+    def _get_system_info(self):
+        info = {
+            "hostname": self.hostname,
+            "os": f"{platform.system()} {platform.release()}",
+            "cpu": 0,
+            "memory": 0,
+            "disk": 0,
+            "uptime": 0,
+            "processes": [],
+            "connections": [],
+        }
+        if HAS_PSUTIL:
+            try:
+                info["cpu"] = round(psutil.cpu_percent(interval=0.5), 1)
+                mem = psutil.virtual_memory()
+                info["memory"] = round(mem.percent, 1)
+                dsk = psutil.disk_usage("/")
+                info["disk"] = round(dsk.percent, 1)
+                info["uptime"] = int(time.time() - psutil.boot_time())
+                proc_list = []
+                for p in psutil.process_iter(["pid", "name", "cpu_percent", "memory_percent"]):
+                    try:
+                        proc_list.append(p.info)
+                    except (psutil.NoSuchProcess, psutil.AccessDenied):
+                        pass
+                info["processes"] = sorted(proc_list, key=lambda x: x.get("cpu_percent", 0), reverse=True)[:20]
+            except Exception:
+                pass
+
+        try:
+            tcp = self._get_tcp_connections()
+            info["connections"] = [
+                {"total": tcp["total"], "established": tcp["established"],
+                 "syn_sent": tcp["syn_sent"], "ports": tcp["ports"][:50]}
+            ]
+        except Exception:
+            pass
+
+        return info
+
+    def _capture_screen(self):
+        if not HAS_MSS:
+            return None
+        try:
+            with mss.mss() as sct:
+                monitor = sct.monitors[1]
+                sct_img = sct.grab(monitor)
+                png = mss.tools.to_png(sct_img.rgb, sct_img.size)
+                b64 = base64.b64encode(png).decode("utf-8")
+                return b64
+        except Exception:
+            return None
+
+    def send_heartbeat(self):
+        info = self._get_system_info()
+        payload = {
+            "agent_id": self.agent_id,
+            "hostname": self.hostname,
+            "os": info["os"],
+            "cpu": info["cpu"],
+            "memory": info["memory"],
+            "disk": info["disk"],
+            "uptime": info["uptime"],
+            "processes": info["processes"],
+            "connections": info["connections"],
+            "timestamp": datetime.now().isoformat(),
+            "source": "live_agent",
+        }
+        try:
+            res = requests.post(
+                f"{self.server_url}{HEARTBEAT_ENDPOINT}",
+                json=payload, timeout=5
+            )
+            if res.status_code == 200:
+                self._heartbeat_count += 1
+                print(f"[HB] Heartbeat #{self._heartbeat_count} — CPU:{info['cpu']}% MEM:{info['memory']}%")
+        except Exception:
+            pass
+
+    def send_screenshot(self):
+        b64 = self._capture_screen()
+        if not b64:
+            return
+        payload = {
+            "agent_id": self.agent_id,
+            "image": b64,
+            "timestamp": datetime.now().isoformat(),
+        }
+        try:
+            requests.post(
+                f"{self.server_url}{SCREEN_ENDPOINT}",
+                json=payload, timeout=10
+            )
+            print(f"[SCR] Screenshot sent")
+        except Exception:
+            pass
 
     def _build_features(self):
         """Build feature vector from live network measurements."""
@@ -287,9 +441,44 @@ class LiveAgent:
         print(f"  Interval:  {self.interval}s")
         print("─" * 50)
 
+        # Send initial heartbeat
+        self.send_heartbeat()
+        heartbeat_interval = max(self.interval * 5, 15)
+        screen_interval = max(self.interval * 15, 60)
+        last_hb = time.time()
+        last_scr = time.time()
+
         while self.running:
             self.send_sample()
+
+            now = time.time()
+            if now - last_hb >= heartbeat_interval:
+                self.send_heartbeat()
+                last_hb = now
+            if now - last_scr >= screen_interval:
+                t = threading.Thread(target=self.send_screenshot, daemon=True)
+                t.start()
+                last_scr = now
+
             time.sleep(self.interval)
+
+    def register_email(self, email):
+        """Register email with server to receive anomaly alerts."""
+        try:
+            res = requests.post(
+                f"{self.server_url}/api/register-email",
+                json={"email": email, "hostname": self.hostname, "agent_id": self.agent_id},
+                timeout=5
+            )
+            if res.status_code == 200:
+                print(f"  Email registered: {email}")
+                return True
+            else:
+                print(f"  Email registration failed: {res.text}")
+                return False
+        except Exception as e:
+            print(f"  Email registration error: {e}")
+            return False
 
     def stop(self):
         self.running = False
@@ -301,13 +490,23 @@ def main():
     parser.add_argument("--server", default="http://127.0.0.1:5000", help="IDS server URL")
     parser.add_argument("--interface", help="Network interface name")
     parser.add_argument("--interval", type=float, default=2.0, help="Sampling interval (seconds)")
+    parser.add_argument("--email", help="Email address for alert notifications")
     args = parser.parse_args()
+
+    email = args.email
+    if not email:
+        inp = input("Enter email for alerts (or press Enter to skip): ").strip()
+        if inp:
+            email = inp
 
     agent = LiveAgent(args.server, args.interface, args.interval)
     print("=" * 50)
     print("  Live Network Agent")
     print("  Real-time traffic capture for ML prediction")
     print("=" * 50)
+
+    if email:
+        agent.register_email(email)
 
     try:
         agent.run()

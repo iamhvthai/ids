@@ -166,7 +166,7 @@ python live_agent.py --server http://<SERVER_IP>:5000
 cd snort3
 docker-compose up -d        # Start Snort3 monitoring
 
-# Copy PCAP vào thư mục pcap/
+# Copy PCAP vào thư mục pcap/ 
 # Snort3 sẽ tự động phân tích và ghi alert vào logs/alert.json
 ```
 
